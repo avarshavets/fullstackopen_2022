@@ -5,6 +5,9 @@ import './App.css';
 // 1.3-1.4
 // Modifying input data as an array of objects.
 // Use map() and reduce() to return the sum of the elements in the array.
+// 1.4-1.5
+//
+
 
 const Header = (props) => {
   return (
@@ -13,7 +16,8 @@ const Header = (props) => {
 };
 
 const Content = (props) => {
-  return (
+    const parts_arr = props.course.parts
+    return (
       <>
           {/*<p>*/}
           {/*  {props.parts[0].name} {props.parts[0].exercises}*/}
@@ -26,7 +30,7 @@ const Content = (props) => {
           {/*</p>*/}
 
           {/* Alternatively -- Create a list of paragraphs using map() */}
-          {props.course.parts.map(item => <p>{item.name} {item.exercises}</p>)}
+          {parts_arr.map(item => <p>{item.name} {item.exercises}</p>)}
       </>
   )
 };
@@ -42,7 +46,8 @@ const Total = (props) => {
     // ----- Alternatively ---------------------------------------------
     // create a new array that consists of only exercises by using map()
     // call reduce() on a newly created array of exercises
-    const totalSum = props.course.parts.map(item => item.exercises).reduce(
+    const parts_arr = props.course.parts
+    const totalSum = parts_arr.map(item => item.exercises).reduce(
         (prev, cur) => prev + cur, 0
     )
     return (
