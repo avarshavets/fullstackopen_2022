@@ -1,3 +1,20 @@
+// Display history of clicks
+const History = (props) => {
+    if (props.allClicks.length === 0) {
+        return (<div>No clicks yet. Please click any button.</div>)
+    }
+    return (
+        <div>
+            Click history: {props.allClicks.join(' ')}
+        </div>
+    )
+}
+
+// Create buttons
+const Button = ({ handleClick, text }) => (
+    <button onClick={handleClick}>{text}</button>
+)
+
 const App = () => {
     const [left, setLeft] = useState(0)
     const [right, setRight] = useState(0)
@@ -21,10 +38,10 @@ const App = () => {
     return (
         <div>
             {left}
-            <button onClick={handleLeftClick}>left</button>
-            <button onClick={handleRightClick}>right</button>
+            <Button handleClick={handleLeftClick} text='Left'/>
+            <Button handleClick={handleRightClick} text='Right'/>
             {right}
-            <p>{allClicks.join(' ')}</p>
+            <History allClicks = {allClicks}/>
         </div>
     )
 }
