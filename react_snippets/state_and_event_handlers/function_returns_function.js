@@ -24,7 +24,7 @@ const App1 = () => {
             <button onClick={hello('function')}>button</button>
         </div>
     )
-
+}
 
 // Example 2: Event handlers that set the state of the component to a given value
 const App2 = () => {

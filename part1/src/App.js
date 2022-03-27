@@ -1,89 +1,84 @@
 import './App.css';
-// 1.1-1.2
-// Multiple functional components.
-// Input data passed through props.
-// 1.3-1.4
-// Modifying input data as an array of objects.
-// Use map() and reduce() to return the sum of the elements in the array.
-// 1.4-1.5
-//
+// import { Table } from "react-bootstrap";
+// import 'bootstrap/dist/css/bootstrap.min.css';
+import { useState} from "react";
 
 
-const Header = (props) => {
-  return (
-      <h1>{props.course.name}</h1>
-  )
-};
+const StatLine = ({text, value}) => (
+    <div>{text} {value}</div>
+)
 
-const Content = (props) => {
-    const parts_arr = props.course.parts
+const Button = (props) => (
+    <button onClick = {props.handleClick}>{props.text}</button>
+)
+
+const DisplayStats = ({good, neutral, bad}) => {
+    const score = {good: 1, neutral: 0, bad: -1}
+
+    // stats calculation
+    const total = good + neutral + bad
+    const averageScore = ((good*score.good + neutral*score.neutral + bad*score.bad) / total).toFixed(2)
+    const positive = (good / total * 100).toFixed(2)
+
+    // conditional rendering
+    if (total > 0) {
+        return (
+            <table>
+                <tbody>
+                <tr>
+                    <td><StatLine text='good'/></td>
+                    <td><StatLine value={good}/></td>
+                </tr>
+                <tr>
+                    <td><StatLine text='neutral'/></td>
+                    <td><StatLine value={neutral}/></td>
+
+                </tr>
+                <tr>
+                    <td><StatLine text='bad'/></td>
+                    <td><StatLine value={bad}/></td>
+                </tr>
+                <tr>
+                    <td><StatLine text='all'/></td>
+                    <td><StatLine value={total}/></td>
+                </tr>
+                <tr>
+                    <td><StatLine text='average'/></td>
+                    <td><StatLine value={averageScore}/></td>
+                </tr>
+                <tr>
+                    <td><StatLine text='positive'/></td>
+                    <td><StatLine value={`${positive}%`}/></td>
+                </tr>
+                </tbody>
+            </table>
+        )
+    }
     return (
-      <>
-          {/*<p>*/}
-          {/*  {props.parts[0].name} {props.parts[0].exercises}*/}
-          {/*</p>*/}
-          {/*<p>*/}
-          {/*    {props.parts[1].name} {props.parts[1].exercises}*/}
-          {/*</p>*/}
-          {/*<p>*/}
-          {/*    {props.parts[2].name} {props.parts[2].exercises}*/}
-          {/*</p>*/}
-
-          {/* Alternatively -- Create a list of paragraphs using map() */}
-          {parts_arr.map(item => <p>{item.name} {item.exercises}</p>)}
-      </>
-  )
-};
-
-const Total = (props) => {
-    // function totalSum() {
-    //     let result = 0;
-    //     for (let i = 0; i < props.parts.length; i++) {
-    //         result += props.parts[i].exercises
-    //     }
-    //     return result
-    // }
-    // ----- Alternatively ---------------------------------------------
-    // create a new array that consists of only exercises by using map()
-    // call reduce() on a newly created array of exercises
-    const parts_arr = props.course.parts
-    const totalSum = parts_arr.map(item => item.exercises).reduce(
-        (prev, cur) => prev + cur, 0
-    )
-    return (
-        <p>
-            Number of exercises = {totalSum}
-        </p>
+        <div>No feedback given yet.</div>
     )
 }
 
+const App = () => {
+    const [good, setGood] = useState(0)
+    const [neutral, setNeutral] = useState(0)
+    const [bad, setBad] = useState(0)
 
-function App() {
-  const course = {
-      name: 'Half Stack application development',
-      parts: [
-          {
-              name: 'Fundamentals of React',
-              exercises: 10
-          },
-          {
-              name: 'Using props to pass data',
-              exercises: 7
-          },
-          {
-              name: 'State of a component',
-              exercises: 14
-          }
-          ]
-  }
+    const handleGood = () => setGood(good + 1)
+    const handleNeutral = () => setNeutral(neutral + 1)
+    const handleBad = () => setBad(bad + 1)
 
-  return (
-      <div>
-        <Header course = {course}/>
-        <Content course = {course}/>
-        <Total course = {course}/>
-      </div>
-  )
+    return (
+        <div>
+            <h1>give feedback</h1>
+            <Button handleClick={handleGood} text={'good'}/>
+            <Button handleClick={handleNeutral} text={'neutral'}/>
+            <Button handleClick={handleBad} text={'bad'}/>
+            <h1>statistics</h1>
+            <DisplayStats good={good} neutral={neutral} bad={bad}/>
+        </div>
+
+    )
 }
 
 export default App;
