@@ -10,15 +10,15 @@ const DisplayAnecdote = ({anecdotes, selected}) => (
 )
 
 const DisplayMostVoted = ({anecdotes, votes}) => {
-    const maxVote = votes.reduce((a,b) => votes[a] > votes[b] ? a : b);
+    const idxMax = votes.reduce((idxMax, item, idx, arr) => arr[idxMax] < item ? idx : idxMax, 0);
     return (
         <>
             <h1>Anecdote with most votes</h1>
             <div>
-                {anecdotes[maxVote]}
+                {anecdotes[idxMax]}
             </div>
             <div>
-                has {maxVote} votes
+                has {votes[idxMax]} votes
             </div>
         </>
     )
