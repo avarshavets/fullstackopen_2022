@@ -20,7 +20,6 @@ const DisplayMostVoted = ({anecdotes, votes}) => {
             <div>
                 has {maxVote} votes
             </div>
-            <div>{votes}</div>
         </>
     )
 }
