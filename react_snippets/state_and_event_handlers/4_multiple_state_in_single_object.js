@@ -6,6 +6,9 @@ const App = () => {
     // click is an object with multiple state 'pieces'
     const [click, setClick] = useState({left: 0, right: 0})
 
+    // Remember:
+    // correct way of updating state stored in complex data structures like
+    // objects and arrays is to make a copy of the state.
 
     return (
         <div>

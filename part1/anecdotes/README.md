@@ -1,70 +1,71 @@
-# Getting Started with Create React App
+Project: Anecdote of the day and most voted anecdote
+- Display random anecdote with a button click
+- Create a button for voting
+- Display most voted anecdote
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
-## Available Scripts
+1.12*: anecdotes step1
 
-In the project directory, you can run:
+Expand the following application by adding a button that can be clicked to display a random anecdote from the field of software engineering:
 
-### `npm start`
+```
+import { useState } from 'react'
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+const App = () => {
+  const anecdotes = [
+    'If it hurts, do it more often',
+    'Adding manpower to a late software project makes it later!',
+    'The first 90 percent of the code accounts for the first 10 percent of the development time...The remaining 10 percent of the code accounts for the other 90 percent of the development time.',
+    'Any fool can write code that a computer can understand. Good programmers write code that humans can understand.',
+    'Premature optimization is the root of all evil.',
+    'Debugging is twice as hard as writing the code in the first place. Therefore, if you write the code as cleverly as possible, you are, by definition, not smart enough to debug it.',
+    'Programming without an extremely heavy use of console.log is same as if a doctor would refuse to use x-rays or blood tests when diagnosing patients'
+  ]
+   
+  const [selected, setSelected] = useState(0)
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+  return (
+    <div>
+      {anecdotes[selected]}
+    </div>
+  )
+}
 
-### `npm test`
+export default App
+```
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+1.13*: anecdotes step2
 
-### `npm run build`
+Expand your application so that you can vote for the displayed anecdote.
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+NB store the votes of each anecdote into an array or object in the component's state. 
+Remember that the correct way of updating state stored in complex data structures like objects and arrays is to make a copy of the state.
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+You can create a copy of an object like this:
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+```
+const points = { 0: 1, 1: 3, 2: 4, 3: 2 }
 
-### `npm run eject`
+const copy = { ...points }
+// increment the property 2 value by one
+copy[2] += 1   
+```
+  
+OR a copy of an array like this:
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+```
+const points = [1, 4, 6, 3]
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+const copy = [...points]
+// increment the value in position 2 by one
+copy[2] += 1   
+``` 
+Using an array might be the simpler choice in this case.
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+1.14*: anecdotes step3
 
-## Learn More
+Now implement the final version of the application that displays the anecdote with the largest number of votes.
+If multiple anecdotes are tied for first place it is sufficient to just show one of them.
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+![img.png](img.png)
