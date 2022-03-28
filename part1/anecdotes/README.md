@@ -8,7 +8,7 @@ Project: Anecdote of the day and most voted anecdote
 
 Expand the following application by adding a button that can be clicked to display a random anecdote from the field of software engineering:
 
-```
+```javascript
 import { useState } from 'react'
 
 const App = () => {
@@ -43,7 +43,7 @@ Remember that the correct way of updating state stored in complex data structure
 
 You can create a copy of an object like this:
 
-```
+```javascript
 const points = { 0: 1, 1: 3, 2: 4, 3: 2 }
 
 const copy = { ...points }
@@ -53,7 +53,7 @@ copy[2] += 1
   
 OR a copy of an array like this:
 
-```
+```javascript
 const points = [1, 4, 6, 3]
 
 const copy = [...points]
