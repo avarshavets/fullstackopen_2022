@@ -13,24 +13,17 @@ const DisplayMostVoted = ({anecdotes, votes}) => {
     // idxMax with reduce:
     // reduce((accumulatedValue, currValue, currIndex, array) => {...})
     // const idxMax = votes.reduce((idxMax, item, idx, arr) => arr[idxMax] < item ? idx : idxMax, 0);
-    
-    const idxMax = () => {
-        let iMax = 0;
-        for (let i=0; i<votes.length; i++) {
-            votes[i] > votes[iMax] ? iMax=i : iMax=iMax
-    }
-        return iMax
-    }
 
+    const idxMax = votes.indexOf(Math.max(...votes))
 
     return (
         <>
             <h1>Anecdote with most votes</h1>
             <div>
-                {anecdotes[idxMax()]}
+                {anecdotes[idxMax]}
             </div>
             <div>
-                has {votes[idxMax()]} votes
+                has {votes[idxMax]} votes
             </div>
         </>
     )
