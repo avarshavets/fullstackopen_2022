@@ -1,10 +1,10 @@
-#Project: Anecdote of the day and most voted anecdote
+# Project: Anecdote of the day and most voted anecdote
 - Display random anecdote with a button click
 - Create a button for voting
 - Display most voted anecdote
 
 
-##1.12*: anecdotes step1
+## 1.12*: anecdotes step1
 
 Expand the following application by adding a button that can be clicked to display a random anecdote from the field of software engineering:
 
@@ -34,7 +34,7 @@ const App = () => {
 export default App
 ```
 
-##1.13*: anecdotes step2
+## 1.13*: anecdotes step2
 
 Expand your application so that you can vote for the displayed anecdote.
 
@@ -63,7 +63,7 @@ copy[2] += 1
 Using an array might be the simpler choice in this case.
 
 
-##1.14*: anecdotes step3
+## 1.14*: anecdotes step3
 
 Now implement the final version of the application that displays the anecdote with the largest number of votes.
 If multiple anecdotes are tied for first place it is sufficient to just show one of them.
