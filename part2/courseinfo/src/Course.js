@@ -1,5 +1,5 @@
 const Parts = ({parts}) => (
-    parts.map(partObj => <p key={partObj.id}>{partObj.name} - {partObj.exercises}</p>)
+    parts.map(partObj => <p>{partObj.name} - {partObj.exercises}</p>)
 )
 
 const Course = ({course}) => {
@@ -9,7 +9,7 @@ const Course = ({course}) => {
     return (
         <div>
             <h2>{course.name}</h2>
-            <Parts parts={course.parts}/>
+            <Parts key={course.parts.id} parts={course.parts}/>
             <strong>total of {exercisesSum} exercises</strong>
         </div>
     )
