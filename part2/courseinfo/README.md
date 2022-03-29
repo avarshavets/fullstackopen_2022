@@ -1,6 +1,6 @@
-Project: Course Info
+# Project: Course Info (Extended)
 
-**2.1: Course information step6**
+## 2.1: Course information step6
 
 Let's change the App component like so:
 ```javascript
@@ -38,11 +38,11 @@ You don't need the sum of the exercises yet.
 
 The application must work regardless of the number of parts a course has, so make sure the application works if you add or remove parts of a course.
 
-**2.2: Course information step7**
+## 2.2-2.3*: Course information step7
 
 Calculate the sum of the exercises of the course using reduce() and display.
 
-**2.4: Course information step9**
+## 2.4: Course information step9
 
 Let's extend our application to allow for an arbitrary number of courses:
 ```javascript
@@ -100,7 +100,3 @@ const App = () => {
 }
 ```
 ![img.png](img.png)
-
-**2.5: separate module**
-
-Declare the Course component as a separate module, which is imported by the App component. You can include all subcomponents of the course into the same module.
