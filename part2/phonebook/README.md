@@ -40,7 +40,7 @@ Sometimes it can be useful to render state and other variables as text for debug
 ```javascript
 <div>debug: {newName}</div>
 ```
-![img.png](img.png)
+![img.png](public/img.png)
 
 NB:
 
@@ -52,7 +52,7 @@ NB:
 Prevent the user from being able to add names that already exist in the phonebook. JavaScript arrays have numerous suitable methods for accomplishing this task. Keep in mind how object equality works in Javascript.
 
 Issue a warning with the alert command when such an action is attempted:
-![img_1.png](img_1.png)
+![img_1.png](public/img_1.png)
 
 Hint: when you are forming strings that contain values from variables, it is recommended to use a template string:
 ```javascript
@@ -68,12 +68,12 @@ Expand your application by allowing users to add phone numbers to the phone book
   <div><button type="submit">add</button></div>
 </form>
 ```
-![img_2.png](img_2.png)
+![img_2.png](public/img_2.png)
 
 ## 2.9*: The Phonebook Step4
 
 Implement a search field that can be used to filter the list of people by name:
-![img_3.png](img_3.png)
+![img_3.png](public/img_3.png)
 
 You can implement the search field as an input element that is placed outside the HTML form. The filtering logic shown in the image is case insensitive, meaning that the search term arto also returns results that contain Arto with an uppercase A.
 
