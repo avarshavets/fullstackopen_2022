@@ -30,7 +30,18 @@ We continue with developing the phonebook. Store the initial state of the applic
 }
 ```
 
-Start json-server on port 3001 (typically it will be port 3000, but we use it for to run our react app). Make sure that the server returns the list of people by going to the address http://localhost:3001/persons in the browser.
+Let JSON Server to act as our server.
+
+You can install JSON server globally on your machine using the command npm install -g json-server. A global installation requires administrative privileges, which means that it is not possible on the faculty computers or freshman laptops.
+
+However, a global installation is not necessary. From the root directory of your app, we can run the json-server using the command npx:
+```shell
+npx json-server --port 3001 --watch db.json
+```
+
+The json-server starts running on port 3000 by default; but since projects created using create-react-app reserve port 3000, we must define an alternate port, such as port 3001, for the json-server.
+
+Let's navigate to the address http://localhost:3001/notes in the browser. We can see that json-server serves the notes there.
 
 If you receive the following error message:
 ```javascript
@@ -45,7 +56,32 @@ Error: listen EADDRINUSE 0.0.0.0:3001
 
 it means that port 3001 is already in use by another application, e.g. in use by an already running json-server. Close the other application, or change the port in case that doesn't work.
 
-Modify the application such that the initial state of the data is fetched from the server using the axios-library. Complete the fetching with an Effect hook.
+Let's make another addition. Install json-server as a development dependency (only used during development) by executing the command:
+```shell
+npm install json-server --save-dev
+```
+and making a small addition to the scripts part of the package.json file:
+```json
+{
+  // ... 
+  "scripts": {
+    // ...
+    "server": "json-server -p3001 --watch db.json"
+  },
+}
+```
+We can now conveniently, without parameter definitions, start the json-server from the project root directory with the command:
+
+```shell
+npm run server
+```
+
+Modify the application such that the initial state of the data is fetched from the server using the axios-library. Don't forget to install axios library with npm:
+```shell
+npm install axios
+```
+
+Complete the fetching with an Effect hook.
 
 ## 2.12* Data for countries, step1
 
