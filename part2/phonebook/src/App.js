@@ -1,4 +1,5 @@
-import { useState } from 'react'
+import axios from "axios";
+import { useState, useEffect } from 'react'
 
 
 const PersonInfo = ({person}) => (
@@ -66,12 +67,7 @@ const PersonForm = ({persons, addToPersons}) => {
 
 
 const App = () => {
-    const [persons, setPersons] = useState([
-        { name: 'Arto Hellas', num: '040-123456', id: 1 },
-        { name: 'Ada Lovelace', num: '39-44-5323523', id: 2 },
-        { name: 'Dan Abramov', num: '12-43-234345', id: 3 },
-        { name: 'Mary Poppendieck', num: '39-23-6423122', id: 4 }
-    ])
+    const [persons, setPersons] = useState([])
     const [filterText, setFilterText] = useState('')
     const handleFilterChange = (event) => setFilterText(event.target.value)
 
@@ -84,6 +80,15 @@ const App = () => {
             alert(`${personObj.name} is already added to the phonebook`) :
             setPersons(persons.concat(personObj))
     }
+
+    // effect - fetching data from json file
+    useEffect(() => {
+        axios
+            .get('http://localhost:3002/persons')
+            .then((response) => {
+                setPersons(response.data)
+            })
+    }, [])
 
     return (
         <div>
