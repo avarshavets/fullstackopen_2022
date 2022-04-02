@@ -60,7 +60,7 @@ Let's make another addition. Install json-server as a development dependency (on
 ```shell
 npm install json-server --save-dev
 ```
-and making a small addition to the scripts part of the package.json file:
+and making a small addition to the scripts part of the package.json file to be able to run a short bash command 'npx run server' scrip instead of 'npx json-server -p3001 --watch db.json':
 ```json
 {
   // ... 
