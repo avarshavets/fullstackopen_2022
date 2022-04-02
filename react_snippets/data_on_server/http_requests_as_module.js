@@ -21,8 +21,8 @@ const update = (id, newObject) => {
 
 // The module returns an object that has three functions
 // (getAll, create, and update) as its properties that deal with notes.
-// NOTE: the functions DO NOT RETURN THE PROMISE with the HTTP response.
-// Instead the functions RETURNS response DATA directly --> !!! response.data !!!
+// NOTE: the functions DO NOT RETURN the PROMISE of the HTTP response.
+// Instead the functions returns PROMISE of DATA property of HTTP response --> !!! response.data !!!
 // (it is not mandatory though).
 export default {
     getAll: getAll,
@@ -34,8 +34,8 @@ export default { getAll, create, update }
 
 // Updates in the App component that allows to use functions in notes.js components
 // 1) Import object with its methods as a variable noteService:
-//    object provides methods: noteService.getAll(), noteService.creat(), and noteService.update()
-// 2) Update axios methods with noteService methods.
+//    object provides APIs: getAll(), creat(), and update()
+// 2) Update axios methods with noteService APIs.
 
 import noteService from './services/notes'
 
