@@ -134,3 +134,19 @@ Change the functionality so that if a number is added to an already existing use
 If the person's information is already in the phonebook, the application can confirm the action from the user:
 
 ![img_1.png](public/img_5.png)
+
+## 2.19: Phonebook step11
+
+Show a notification that lasts for a few seconds after a successful operation is executed (a person is added or a number is changed):
+
+fullstack content
+![img.png](public/img_6.png)
+
+## 2.20*: Phonebook step12
+Open your application in two browsers. If you delete a person in browser 1 a short while before attempting to change the person's phone number in browser 2, you will get 404 error message.
+
+Modify the app so that the user is shown a message when the operation does not succeed. The messages shown for successful and unsuccessful events should look different:
+
+![img_1.png](public/img_7.png)
+
+Note that even if you handle the exception, the error message is printed to the console.
