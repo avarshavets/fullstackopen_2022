@@ -72,6 +72,9 @@ const PersonForm = ({addToPersons}) => {
 const App = () => {
     const [persons, setPersons] = useState([])
     const [filterText, setFilterText] = useState('')
+    const [successMsg, setSuccessMsg] = useState(null)
+    const [errorMsg, setErrorMsg] = useState(null)
+
     const handleFilterChange = (event) => setFilterText(event.target.value)
 
     // filtered list of persons to be displayed depending on search filter
@@ -85,17 +88,26 @@ const App = () => {
         const personObjFound = persons.find(person =>
             person.name.toLowerCase() === personObj.name.toLowerCase())
 
-        personObjFound ?
-            window.confirm(`${personObjFound.name} is already added to the phonebook, 
-            replace the old number with a new one?`) &&
-            updatePerson(personObjFound.id, personObj) :
+        const showSuccessMsg = () => {
+            setSuccessMsg(`Added ${personObj.name}`)
+            setTimeout(() => {setSuccessMsg(null)}, 2000)
+        }
 
+        if (personObjFound) {
+            if (window.confirm(`${personObjFound.name} is already added to the phonebook, 
+            replace the old number with a new one?`)) {
+                updatePerson(personObjFound.id, personObj)
+                showSuccessMsg()
+            }
+        } else {
             // save new personObj to a backend server and update 'persons' state
             personService
                 .create(personObj)
                 .then(returnedObj => {
                     setPersons(persons.concat(returnedObj))
                 })
+            showSuccessMsg()
+        }
     }
 
     const removeFromPersons = personObj => {
@@ -104,6 +116,11 @@ const App = () => {
             .remove(personObj.id)
             .then(() => {
                 setPersons(persons.filter(p => p.id !== personObj.id))
+            })
+            .catch(error => {
+                setErrorMsg(`Information of ${personObj.name} 
+                has been already removed`)
+                setTimeout(() => {setErrorMsg(null)}, 5000)
             })
     }
 
@@ -122,9 +139,47 @@ const App = () => {
             .then(data => {setPersons(data)})
     }, [])
 
+    // notification of success when adding a person
+    const SuccessNotification = ({msg}) => {
+        // css properties for successMsg as JS object
+        const successMsgStyle = {
+            color: 'green',
+            backgroundColor: 'lightgrey',
+            fontSize: 16,
+            borderStyle: 'solid',
+            borderColor: 'green',
+            birderRadius: 5,
+            padding: 10,
+            marginBottom: 10
+        }
+        if (msg === null) {return null}
+        return (
+            <div style={successMsgStyle}>{msg}</div>
+        )
+    }
+
+    const ErrorNotification = ({msg}) => {
+        const errorMsgStyle = {
+            color: 'red',
+            backgroundColor: 'lightgrey',
+            fontSize: 16,
+            borderStyle: 'solid',
+            borderColor: 'red',
+            birderRadius: 5,
+            padding: 10,
+            marginBottom: 10
+        }
+        if (msg === null) {return null}
+        return (
+            <div style={errorMsgStyle}>{msg}</div>
+        )
+    }
+
     return (
         <div>
             <h2>Phonebook</h2>
+            <SuccessNotification msg={successMsg}/>
+            <ErrorNotification msg={errorMsg}/>
             <Filter filterText={filterText} handleFilterChange={handleFilterChange}/>
             <h3>add a new</h3>
             <PersonForm addToPersons={addToPersons}/>
