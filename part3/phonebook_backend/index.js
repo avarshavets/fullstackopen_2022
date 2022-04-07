@@ -1,3 +1,5 @@
+// use the variables in the .env file with dotenv module in express
+require('dotenv').config()
 const express = require('express')
 const morgan = require('morgan') // logging middleware
 const {token} = require("morgan");
@@ -17,34 +19,67 @@ app.use(morgan(':method :url :status :res[content-length] - :response-time ms :p
 app.use(cors())
 app.use(express.static('build'))
 
+// add connection to MongoDB
+const mongoose = require('mongoose')
 
-let persons = [
-    {
-        "id": 1,
-        "name": "Arto Hellas",
-        "num": "040-123456"
-    },
-    {
-        "id": 2,
-        "name": "Ada Lovelace",
-        "num": "39-44-5323523"
-    },
-    {
-        "id": 3,
-        "name": "Dan Abramov",
-        "num": "12-43-234345"
-    },
-    {
-        "id": 4,
-        "name": "Mary Poppendieck",
-        "num": "39-23-6423122"
+const url = process.env.MONGODB_URI
+console.log('connecting to', url)
+
+mongoose.connect(url)
+    .then(result => {
+        console.log('connected to MongoDB')
+    })
+    .catch((error) => {
+        console.log('error connecting to MongoDB:', error.message)
+    })
+
+
+const personSchema = new mongoose.Schema({
+    name: String,
+    num: Number,
+})
+
+// modify toJSON method that will transform mongoose document before returning (replace or delete '_id' and '__v')
+personSchema.set('toJSON',  {
+    transform: (document, returnedObject) => {
+        returnedObject.id = returnedObject._id.toString()
+        delete returnedObject._id
+        delete returnedObject.__v
     }
-]
+})
+
+const Person = mongoose.model('Person', personSchema)
+
+
+// let persons = [
+//     {
+//         "id": 1,
+//         "name": "Arto Hellas",
+//         "num": "040-123456"
+//     },
+//     {
+//         "id": 2,
+//         "name": "Ada Lovelace",
+//         "num": "39-44-5323523"
+//     },
+//     {
+//         "id": 3,
+//         "name": "Dan Abramov",
+//         "num": "12-43-234345"
+//     },
+//     {
+//         "id": 4,
+//         "name": "Mary Poppendieck",
+//         "num": "39-23-6423122"
+//     }
+// ]
 
 
 // get request to the /api/persons path of the application
 app.get('/api/persons', (request, response) => {
-    response.json(persons)
+    Person.find().then(person => {
+        response.json(person)
+    })
 })
 
 app.get('/info', (request, response) => {
