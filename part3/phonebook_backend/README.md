@@ -105,3 +105,69 @@ This exercise can be completed in a few different ways. One of the possible solu
 
 - creating new tokens
 - JSON.stringify
+
+# Deploying App to the Internet 
+
+Until now:
+
+- we run a ```react-stcript``` to run one server for the frontend side;
+- we run second 'fake' json-server or created web server for the backend side.
+
+Now we deploy the backend and frontend from one server on cloud platform:
+
+- we run the backend server;
+- the backend looks for the frontend static page with JS, and loads it; 
+- frontend react scripts run and start interact with the backend data;
+- data being rendered to the page. 
+
+## 1. Deploying Backend to the Internet (Heroku cloud platform)
+
+- Add a file called Procfile (without extension!) to the backend project's root to tell Heroku how to start the application.
+```shell
+web: npm start
+```
+- Change the definition of the port our application uses at the bottom of the index.js file like so:
+```js
+const PORT = process.env.PORT || 3001
+app.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`)
+})
+```
+- Create Heroku account and install Heroku package using command ```npm install -g heroku``` Alternatively, in case the previous command does not work, use the command ```npx heroku```
+
+- Create a Heroku application with the command ```heroku create```
+
+- Create a Git repository in the project directory with ```git init```, and add node_module to .gitignore. Commit your code to git and move it to Heroku with command ```git push heroku master```
+
+If everything went well, the application works, and the data are displayed at *https://secure-chamber-60641.herokuapp.com/api/persons*. If not, check heroku logs. The best way to read heroku logs is with command ```heroku logs -t``` which prints the logs to console whenever something happens on the server.
+
+## 2. Deploying Frontend Production Build to the Internet
+
+**1. Create frontend production build**
+
+A production build of applications created with create-react-app can be created with command ```npm run build``` run from the *root of the frontend project*.
+
+**2. Serve static frontend files from the backend**
+
+- Copy the production build (the *build* directory) to the root of the backend repository
+
+- Add *static* middleware to the backend to show the *static* content (index.html and JavaScrip, etc.).
+```js
+app.use(express.static('build'))
+```
+- Modify base url as relative in the frontend
+
+- To reflect new changes, create a new production build ```npm run build``` and copy it to the root of the backend repository.
+
+**Short commands for the deployment of frontend to the cloud**
+```json
+{
+  "scripts": {
+    //...
+    "build:ui": "rm -rf build && cd ../../part2/phonebook/ && npm run build && cp -r build ../../part3/phonebook_backend",
+    "deploy": "git push heroku master",
+    "deploy:full": "npm run build:ui && git add . && git commit -m uibuild && git push && npm run deploy",    
+    "logs:prod": "heroku logs --tail"
+  }
+}
+```
