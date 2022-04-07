@@ -19,6 +19,7 @@
     "eject": "react-scripts eject",
     "server": "json-server -p3002 --watch db.json"
   },
+  // proxy allows frontend to connect to the json-server locally in dev mode (server's URL is different in this case)
   "proxy": "http://localhost:3002",
   "eslintConfig": {
     "extends": [
