@@ -1,4 +1,3 @@
-import axios from "axios";
 import { useState, useEffect } from 'react';
 import personService from './services/person_service'
 

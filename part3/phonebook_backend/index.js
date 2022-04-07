@@ -4,8 +4,19 @@ const {token} = require("morgan");
 const cors = require('cors') // cors middleware allows requests from all origins
 // Note: backend and frontend run in different localhost ports --> servers do not have the save origins
 
-
 const app = express()
+// enables express to use json-parser as a middleware
+app.use(express.json())
+
+// enable express to use morgan logging with a custom token
+morgan.token('post-obj', (req,res) => {
+    return req.method === 'POST'? JSON.stringify(req.body) : ' '
+});
+app.use(morgan(':method :url :status :res[content-length] - :response-time ms :post-obj'))
+
+app.use(cors())
+app.use(express.static('build'))
+
 
 let persons = [
     {
@@ -29,16 +40,6 @@ let persons = [
         "num": "39-23-6423122"
     }
 ]
-
-// enables express to use json-parser as a middleware
-app.use(express.json())
-// enable express to use morgan logging with a custom token
-morgan.token('post-obj', (req,res) => {
-    return req.method === 'POST'? JSON.stringify(req.body) : ' '
-});
-app.use(morgan(':method :url :status :res[content-length] - :response-time ms :post-obj'))
-
-app.use(cors())
 
 
 // get request to the /api/persons path of the application
@@ -99,7 +100,7 @@ app.post('/api/persons',(req, res) => {
     res.json(person)
 })
 
-const PORT = 3002
+const PORT = process.env.PORT || 3002
 app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`)
 })
