@@ -171,3 +171,25 @@ app.use(express.static('build'))
   }
 }
 ```
+
+# Saving Data To MongoDB
+
+1. Create MongoDB account and install mongoose library to use with MongoDB. Add mongoDB url with embedded password to .env variable (_.env is not pushed to heroku, since it is in .gitignore_) to use in dev mode. Additionally, add mongoDB url with embedded password to Heroku Config Vars in Settings.
+
+
+2. Create separate person.js file, which does the following:
+
+
+   - establishes connection to mongoDB; 
+   - defines _schema_ of a person (tells mongoose how the person objects are to be stored in the db)
+   - defines mongoose _document model_ for person (constructor function that creates new JS object).
+
+
+3. Import the mongoose person.js module to the index.js file. Modify APIs (specifically handlers of the APIs) to enable the interaction with the database.
+
+
+4. Add error handling as a separate express middleware. Remember the importance of positioning the middleware in the code. _The execution order of middleware is the same as the order of their loading!_
+
+
+5. Update the production build and deploy.
+
