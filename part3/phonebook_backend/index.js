@@ -1,7 +1,7 @@
 require('dotenv').config()  // use the variables in the .env file with dotenv module in express
 const express = require('express')
 const morgan = require('morgan')    // logging middleware
-morgan.token('post-obj', (req, res) => {
+morgan.token('post-obj', (req) => {
     return req.method === 'POST' ? JSON.stringify(req.body) : ' '
 }); // define custom token for morgan log
 const cors = require('cors')    // cors middleware allows requests from all origins
@@ -35,35 +35,37 @@ app.get('/info', async (request, response) => {
 })
 
 
-app.post('/api/persons', (request, response) => {
+app.post('/api/persons', async (request, response, next) => {
     const body = request.body
-
-    if (body.name === undefined) {
-        return response.status(400).json({error: 'content missing'})
-    }
 
     const person = new Person({
         name: body.name,
         num: body.num,
     })
 
-    person.save().then(savedPerson => {
-        response.json(savedPerson)
-    })
+    if (await Person.findOne({ name: new RegExp('^' + body.name + '$', 'i') })) {
+        return response.status(400).json({ error: `${body.name} already in the phonebook` })
+    }
+
+    person.save()
+        .then(savedPerson => {
+            response.json(savedPerson)
+        })
+        .catch(error => next(error))
 })
 
 
 app.get('/api/persons/:id', (req, res, next) => {
     Person.findById(req.params.id)
         .then(person => {
-        person ? res.json(person) : res.status(404).end()
-    })
-        .catch(error => {next(error)})
+            person ? res.json(person) : res.status(404).end()
+        })
+        .catch(error => next(error))
 })
 
 
 app.delete('/api/persons/:id', (req, res) => {
-    Person.deleteOne({_id: req.params.id}).then(resDb => {
+    Person.deleteOne({ _id: req.params.id }).then(resDb => {
         // respond with a status code 204 no content and return no data with the response
 
         if (resDb.deletedCount === 0) {
@@ -74,7 +76,7 @@ app.delete('/api/persons/:id', (req, res) => {
 })
 
 
-app.put('/api/persons/:id',(req, res, next) => {
+app.put('/api/persons/:id', (req, res, next) => {
     const body = req.body
     const person = new Person({
         _id: req.params.id,
@@ -82,7 +84,7 @@ app.put('/api/persons/:id',(req, res, next) => {
         num: body.num,
     })
 
-    Person.findByIdAndUpdate(req.params.id, person, {returnDocument: 'after'})
+    Person.findByIdAndUpdate(req.params.id, person, { returnDocument: 'after', runValidators: true })
         .then(updatedPerson => {
             res.json(updatedPerson)
         })
@@ -91,11 +93,14 @@ app.put('/api/persons/:id',(req, res, next) => {
 
 
 const errorHandler = (error, request, response, next) => {
-    console.error(error.message)
+    console.error(error.message, error)
 
     if (error.name === 'CastError') {
         return response.status(400).send({ error: 'id format is incorrect' })
+    } else if (error.name === 'ValidationError') {
+        return response.status(400).json({ error: error.message })
     }
+
     next(error)
 }
 app.use(errorHandler)

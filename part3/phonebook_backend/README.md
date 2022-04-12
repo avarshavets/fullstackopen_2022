@@ -193,3 +193,55 @@ app.use(express.static('build'))
 
 5. Update the production build and deploy.
 
+# Validation
+
+Expand the validation so that the name stored in the database has to be at least three characters long.
+
+Expand the frontend so that it displays some form of error message when a validation error occurs. Error handling can be implemented by adding a catch block with logging error as as ```error.response.data```
+
+Note: On update operations, mongoose validators are off by default. Read the documentation to determine how to enable them.
+
+Add validation to your phonebook application, that will make sure that phone numbers are of the correct form. A phone number must
+
+- has length of 8 or more
+- if formed of two parts that are separated by -, the first part has two or three numbers and the second part also consists of numbers
+
+   - eg. 09-1234556 and 040-22334455 are valid phone numbers 
+   - eg. 1234556, 1-22334455 and 10-22-334455 are invalid
+
+Use a Custom validator to implement the second part of the validation.
+
+If an HTTP POST request tries to add a name that is already in the phonebook, the server must respond with an appropriate status code and error message.
+
+## Add ESLint to the application to detect and fix all warnings
+
+Install ESling as a development dependency to the backend project:
+
+```shell
+npm install eslint --save-dev
+npx eslint --init
+```
+
+Running the inspection for index.js
+
+```shell
+npx eslint index.js
+```
+
+Note: build folder should be added to .eslintignore (additionally created).
+
+Possible configuration for inspection rules in ESling:
+
+```json
+    "rules": {
+        'eqeqeq': 'error',
+        'no-trailing-spaces': 'error',
+        'object-curly-spacing': [
+            'error', 'always'
+        ],
+        'arrow-spacing': [
+            'error', { 'before': true, 'after': true }
+        ],
+        'no-console': 0
+    }
+```
