@@ -40,7 +40,7 @@ const mostBlogs = blogs => {
         }
 
     // author with most blogs as an object
-    const mostBlogs = {'author': '', 'blogs': 0}
+    const mostBlogs = { 'author': '', 'blogs': 0 }
     for (const [key, value] of Object.entries(dict)) {
         if (value > mostBlogs.blogs) {
             mostBlogs.blogs = value
@@ -63,7 +63,7 @@ const mostLikes = blogs => {
     }
 
     // author with most likes as an object
-    const mostLikes = {'author': '', 'likes': 0}
+    const mostLikes = { 'author': '', 'likes': 0 }
     for (const [key, value] of Object.entries(dict)) {
         if (value > mostLikes.likes) {
             mostLikes.likes = value
