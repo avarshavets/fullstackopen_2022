@@ -137,6 +137,11 @@ Add shortcut in _package.json_ to run jest tests:
   //...
 }
 ```
+You can also add _runInBand_ option to the test as:
+```json
+  "test": "jest --verbose --runInBand"
+```
+_runInBand_ option will prevent Jest from running rests in parallel.
 
 Finally, specify the execution environment for Jest in _package.json_:
 
@@ -150,6 +155,7 @@ Finally, specify the execution environment for Jest in _package.json_:
 ```
 
 _until/list_helper.js_ contains functions for testing the blog list.
+
 All Jest tests are saved with _.test.js_ extension and located in _test/_ directory, e.g.: _test/list_helper.test.js_
 
 To run the all test, run command:
@@ -157,9 +163,19 @@ To run the all test, run command:
 npm run test
 ```
 
-To run only specific test, run command:
+To run only specific test in the file, run command:
 ```shell
 npm test -- -t 'name of the test'
+```
+
+To run only specific file with tests, run command:
+```shell
+npm test -- tests_folder/file_name.test.js
+```
+
+To run all test that contain a specific word in their names, run command:
+```shell
+npm test -- -t 'word'
 ```
 
 ### Exercises
@@ -274,3 +290,52 @@ likes: 17
 ```
 
 If there are many top bloggers, then it is enough to show any one of them.
+
+## API-level integration tests for server application
+
+### Specifying production and development mode
+
+The Node convention is to separate between production and development mode when running Node.js server. For this purpose, we add the following modification to _package.json_:
+```json
+{
+  // ...
+  "scripts": {
+    "start": "NODE_ENV=production node index.js",
+    "dev": "NODE_ENV=development nodemon index.js",
+    // ...
+    "test": "NODE_ENV=test jest --verbose --runInBand"
+  }
+}
+```
+
+We also added the _runInBand_ option to the npm script for test. It will prevent Jest from running tests in parallel.
+
+If there are different DB for testing, the change of MongoDB URIs needs to be reflected in corresponding variables in _.env_ file as well as in application's configuration, e.g:
+
+```javascript
+const MONGODB_URI = process.env.NODE_ENV === 'test' 
+  ? process.env.TEST_MONGODB_URI
+  : process.env.MONGODB_URI
+```
+
+### supertest
+
+[_Supertest_](https://github.com/visionmedia/supertest) package helps write our tests for testing the API in development mode.
+
+```shell
+npm install --save-dev supertest
+```
+
+The test imports the Express application from the _app.js_ module and wraps it with the _supertest_ function into a so-called _superagent_ object. This object is assigned to the _api_ variable and tests can use it for making HTTP requests to the backend.
+
+When test use _api_ superagent, supertest starts the server application _app.js_. If the server is not already listening for connections then it is bound to an ephemeral port for you so there is no need to keep track of ports.
+
+### Exercises
+
+Write tests to test all HTTP requests.
+
+Once the test is finished, refactor the API code to use async/await instead of promises.
+
+NOTE:
+
+Installing [_express-async-errors_](https://github.com/davidbanham/express-async-errors) library, will enable to eliminate the _try-catch_ structure
