@@ -41,7 +41,9 @@ describe('HTTP GET testing', () => {
 
     test('id property exists', async () => {
         const response = await api.get('/api/blogs')
-        expect(response.body[0].id).toBeDefined
+        for (const obj of response.body) {
+            expect(obj.id).toBeUndefined
+        }
     })
 })
 
