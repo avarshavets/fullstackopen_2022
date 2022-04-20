@@ -1,6 +1,7 @@
 const mongoose = require('mongoose')
 const supertest = require('supertest')
 const helper = require('./blog_test_helper')
+const helperUser = require('./user_test_helper')
 const app = require('../app')
 
 // Supertest starts the application with a purpose to test HTTP server:
@@ -9,10 +10,12 @@ const app = require('../app')
 const api = supertest(app)
 
 const Blog = require('../models/blog')
-const {response} = require("express");
+const User = require('../models/user')
+
 const {blogsInDB, nonExistingId} = require("./blog_test_helper");
 
 const initialBlogs = helper.initialBlogs
+
 
 // clear all document in DB and populate with the data set
 beforeEach( async () => {
@@ -20,6 +23,12 @@ beforeEach( async () => {
     for (const blog of initialBlogs) {
         let blogObj = new Blog(blog)
         await blogObj.save()
+    }
+
+    await User.deleteMany({})
+    for (const user of helperUser.initialUsers) {
+        let userObj = new User(user)
+        await userObj.save()
     }
 })
 
@@ -49,11 +58,15 @@ describe('HTTP GET testing', () => {
 
 describe('HTTP POST testing', () => {
     test('new blog post is successfully added', async () => {
+        const usersAtStart = await helperUser.usersInDB()
+        const currentUser = usersAtStart[0]
+
         const newBlog = {
             'title': 'new title',
             'author': 'new author',
             'url': 'new url',
-            'likes': 10
+            'likes': 10,
+            'user': currentUser.id
         }
 
         await api.post('/api/blogs').send(newBlog)
@@ -62,13 +75,23 @@ describe('HTTP POST testing', () => {
 
         const resultedBlogs = await helper.blogsInDB()
         expect(resultedBlogs).toHaveLength(initialBlogs.length + 1)
+        const addedBlog = resultedBlogs[resultedBlogs.length - 1]
+
+        // blog id is added to the current user blogs array
+        currentUser.blogs.map(blog => {
+            expect(blog).toContain(addedBlog.id)
+        })
     })
 
     test('blog without likes has default likes = 0', async () => {
+        const usersAtStart = await helperUser.usersInDB()
+        const currentUser = usersAtStart[0]
+
         const newBlog = {
             'title': 'new title',
             'author': 'new author',
-            'url': 'new url'
+            'url': 'new url',
+            'user': currentUser.id
         }
 
         await api.post('/api/blogs').send(newBlog)
@@ -76,14 +99,19 @@ describe('HTTP POST testing', () => {
 
         const resultedBlogs = await helper.blogsInDB()
         expect(resultedBlogs).toHaveLength(initialBlogs.length + 1)
-        expect(resultedBlogs.pop().likes).toBe(0)
+        const addedBlog = resultedBlogs[resultedBlogs.length - 1]
+        expect(addedBlog.likes).toBe(0)
+        })
 
-    })
 
     test('blog without a title / url is not added', async () => {
+        const usersAtStart = await helperUser.usersInDB()
+        const currentUser = usersAtStart[0]
+
         const newBlog = {
-            'title': 'new title',
-            'likes': 10
+            'author': 'new author',
+            'likes': 10,
+            'user': currentUser.id
         }
 
         await api.post('/api/blogs').send(newBlog)

@@ -4,7 +4,11 @@ const blogSchema = new mongoose.Schema({
     title: String,
     author: String,
     url: String,
-    likes: Number
+    likes: Number,
+    user: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User'
+    }
 })
 
 // modify toJSON method that will transform mongoose document before returning (replace or delete '_id' and '__v')
