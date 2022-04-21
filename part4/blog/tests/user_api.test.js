@@ -6,8 +6,6 @@ const app = require('../app')
 const api = supertest(app)
 
 const User = require('../models/user')
-const {usersInDB, nonExistingId} = require("./user_test_helper");
-
 const initialUsers = helper.initialUsers
 
 // clear all document in DB and populate with the data set
@@ -36,7 +34,7 @@ describe('HTTP GET testing', () => {
         const response = await api.get('/api/users')
         expect(response.body).toEqual(
             expect.arrayContaining([
-                expect.objectContaining({id: expect.any(String)})
+                expect.objectContaining({ id: expect.any(String) })
             ])
         )
     })
