@@ -2,6 +2,7 @@ const mongoose = require('mongoose')
 const supertest = require('supertest')
 const helper = require('./blog_test_helper')
 const helperUser = require('./user_test_helper')
+const bcrypt = require('bcrypt')
 const app = require('../app')
 
 // Supertest starts the application with a purpose to test HTTP server:
@@ -23,8 +24,10 @@ beforeAll(async () => {
         'username': 'MichelSmith',
         'password': 'mSmithPsw',
     }
-    // add user to the DB by using API (we need hashed password created in API!)
-    await api.post('/api/users').send(user)
+    const passwordHash = await bcrypt.hash(user.password, 10)
+    const savedUser = new User ({ username: user.username, passwordHash })
+    await savedUser.save()
+
     await api.post('/api/login').send(user).then(res => {
         userAuth = res.body.token
     })
@@ -180,29 +183,29 @@ describe('HTTP DELETE testing', () => {
 
 })
 
-// describe('HTTP PUT testing', () => {
-//     test('likes value is updated successfully', async () => {
-//         const blogsAtStart = await blogsInDB()
-//         const blogToUpdate = blogsAtStart[0]
-//         const valueToUpdate = {'likes': 50}
-//         await api.put(`/api/blogs/${blogToUpdate.id}`).send(valueToUpdate)
-//             .expect(200)
-//             .expect('Content-Type', /application\/json/)
-//             .expect(res => {
-//                 res.body.likes = valueToUpdate.likes
-//             })
-//     })
-//
-//     test('blog with invalid id throws 400 error', async () => {
-//         const invalidId = '555'
-//         const valueToUpdate = {'likes': 50}
-//         await api.put(`/api/blogs/${invalidId}`).send(valueToUpdate)
-//             .expect(400)
-//             .expect(res => {
-//                 res.body.error = 'id format is incorrect'
-//             })
-//     })
-// })
+describe('HTTP PUT testing', () => {
+    test('likes value is updated successfully', async () => {
+        const blogsAtStart = await blogsInDB()
+        const blogToUpdate = blogsAtStart[0]
+        const valueToUpdate = {'likes': 50}
+        await request.put(`/api/blogs/${blogToUpdate.id}`).send(valueToUpdate)
+            .expect(200)
+            .expect('Content-Type', /application\/json/)
+            .expect(res => {
+                res.body.likes = valueToUpdate.likes
+            })
+    })
+
+    test('blog with invalid id throws 400 error', async () => {
+        const invalidId = '555'
+        const valueToUpdate = {'likes': 50}
+        await request.put(`/api/blogs/${invalidId}`).send(valueToUpdate)
+            .expect(400)
+            .expect(res => {
+                res.body.error = 'id format is incorrect'
+            })
+    })
+})
 
 
 afterAll(() => {
