@@ -21,8 +21,8 @@ let userAuth = ''
 beforeAll(async () => {
     await User.deleteMany({})
     const user = {
-        'username': 'MichelSmith',
-        'password': 'mSmithPsw',
+        'username': 'msmith',
+        'password': 'msmith',
     }
     const passwordHash = await bcrypt.hash(user.password, 10)
     const savedUser = new User ({ username: user.username, passwordHash })
