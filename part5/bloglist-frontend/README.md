@@ -44,3 +44,29 @@ However it is good to notice that even the use of a httpOnly cookies does not gu
 
 So no matter the used solution the most important thing is to minimize the risk of XSS attacks altogether.
 
+## props.children, references to components with ref, and proptypes
+
+- Create a _Toggleable.js_ component that manages the visibility of the child component defined inside. The component has a fixed structure and thus, can be reusable. Any child component/element we want to use in Toggleable is defined between ```<Toggleable>...</Toggleable>``` and can be added to the component's body through ```props.children```.
+
+
+- Use ref to reference the child component of a parent component so that a parent component can use defined functions of a child component. _Remember: reverse data flow - from a child to a parent - is discouraged._
+  
+  We want to 'close' _Create Blog Form_ when clicking _create_ button.
+
+  Possible ways to do this:
+
+  1) add _toggleVisibility_ function to _createBlog_ function in App component;
+  
+  2) pass _toggleVisibility_ function to _CreateBlogForm_ component and call it there.
+  
+  No matter what option is chosen, the App needs to access a function of the child component _Toggleable_. _useRef_ hook can enable a parent component to access parameters of its child component.
+
+
+- _PropTypes_ package enables to make specified props to be required.
+
+  ```shell
+  npm install prop-types
+  ```
+
+
+
