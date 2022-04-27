@@ -26,7 +26,7 @@ const update = async (id, newObj) => {
 }
 
 const remove = async (id) => {
-  axios.delete(`${baseUrl}/${id}`)
+  await axios.delete(`${baseUrl}/${id}`)
 }
 
 
