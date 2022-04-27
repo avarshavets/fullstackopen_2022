@@ -1,10 +1,11 @@
-import React, { useState, useEffect, useRef } from 'react';
-import Blog from './components/Blog';
-import Notification from "./components/Notification";
-import Toggleable from "./components/Togglable";
-import blogService from './services/blogs';
-import loginService from './services/login';
-import CreateBlogForm from "./components/CreateBlogForm";
+import React, { useState, useEffect, useRef } from 'react'
+
+import Blog from './components/Blog'
+import Notification from './components/Notification'
+import Toggleable from './components/Togglable'
+import blogService from './services/blogs'
+import loginService from './services/login'
+import CreateBlogForm from './components/CreateBlogForm'
 
 
 const App = () => {
@@ -16,7 +17,7 @@ const App = () => {
   // notification = {message, type}
   const [notification, setNotification] = useState(null)
 
-    // Toggleable component will be stored as an object instance in ref
+  // Toggleable component will be stored as an object instance in ref
   const toggleableRef = useRef()
 
   useEffect(() => {
@@ -43,7 +44,7 @@ const App = () => {
     e.preventDefault()
     try {
       // login returns an object {token, username, name}
-      const user = await loginService.login({username, password})
+      const user = await loginService.login({ username, password })
 
       // save user data in local storage of this web app
       // Note: js object must be converted to string to be saved as a DOMstring in local storage
@@ -58,14 +59,14 @@ const App = () => {
       setPassword('')
     } catch (error) {
       notify({
-        message: "wrong username or password",
+        message: 'wrong username or password',
         type: 'alert'
       })
     }
   }
 
 
-  const handleLogout = (e) => {
+  const handleLogout = () => {
     window.localStorage.removeItem('loggedAppUser')
     setUser(null)
   }
@@ -73,81 +74,81 @@ const App = () => {
 
   const createBlog = blogObj => {
     blogService.create(blogObj)
-        .then(returnedBlog => {
-          // hide Create Blog Form when new blog is created
-          toggleableRef.current.toggleVisibility()
+      .then(returnedBlog => {
+        // hide Create Blog Form when new blog is created
+        toggleableRef.current.toggleVisibility()
 
-          setBlogs(blogs.concat(returnedBlog))
-          notify({
-            message: `a new blog \'${returnedBlog.title}\' by ${returnedBlog.author} was created`,
-            type: 'info'
-          })
+        setBlogs(blogs.concat(returnedBlog))
+        notify({
+          message: `a new blog '${returnedBlog.title}' by ${returnedBlog.author} was created`,
+          type: 'info'
         })
-        .catch(error => {
-          notify({
-            message: error.response.data.error,
-            type: 'alert'
-          })
-    })
+      })
+      .catch(error => {
+        notify({
+          message: error.response.data.error,
+          type: 'alert'
+        })
+      })
   }
 
   const updateBlog = (blogId, blogObj) => {
-      blogService.update(blogId, blogObj)
-          .then(returnedBlog => {
-              setBlogs(blogs.map(b => b.id === blogId ? returnedBlog : b))
-              })
-          .catch( error => {
-              console.log(error.response.data)
-              notify({
-                  message: error.response.data,
-                  type: 'alert'
-              })
-          })
+    blogService.update(blogId, blogObj)
+      .then(returnedBlog => {
+        setBlogs(blogs.map(b => b.id === blogId ? returnedBlog : b))
+      })
+      .catch( error => {
+        console.log(error.response.data)
+        notify({
+          message: error.response.data,
+          type: 'alert'
+        })
+      })
   }
 
 
   const removeBlog = async blogObj => {
-      window.confirm(`Remove blog \'${blogObj.title}\'?`) &&
+    window.confirm(`Remove blog '${blogObj.title}'?`) &&
       blogService.remove(blogObj.id)
-          .then(()=> {
-              setBlogs(blogs.filter(p => p.id !== blogObj.id))
+        .then(() => {
+          setBlogs(blogs.filter(p => p.id !== blogObj.id))
+        })
+        .catch(() => {
+          notify({
+            message: `Blog '${blogObj.title}' has been already removed`,
+            type: 'alert'
           })
-          .catch(error => {
-              notify({
-                  message: `Blog \'${blogObj.title}\' has been already removed`,
-                  type: 'alert'
-              })
-          })
+        })
   }
 
 
   const loginForm = () => (
-      <>
-        <h2>log in to application</h2>
-        <form onSubmit={handleLogin}>
-          <div>
+    <>
+      <h2>log in to application</h2>
+      <form onSubmit={handleLogin}>
+        <div>
             username <input type='text' value={username} name='Username' onChange={
             (e) => setUsername(e.target.value)}/>
-          </div>
-          <div>
+        </div>
+        <div>
             password <input type='text' value={password} name='Password' onChange={
             (e) => setPassword(e.target.value)}/>
-          </div>
-          <button type='submit'>login</button>
-        </form>
-      </>
+        </div>
+        <button type='submit'>login</button>
+      </form>
+    </>
   )
 
 
   const displayLoggedInUser = () => (
-      <>
-        <h2>blogs</h2>
-        <div>
-          {user.username} is logged in
-          <span> </span>
-          <button onClick={handleLogout}>logout</button>
-        </div>
-      </>
+    <>
+      <h2>blogs</h2>
+      <div>
+        {user.username} is logged in
+        <span> </span>
+        <button onClick={handleLogout}>logout</button>
+      </div>
+    </>
   )
 
   const notify = ({ message, type }) => {
@@ -159,51 +160,51 @@ const App = () => {
 
 
   if (!user) {
-      return (
-          <>
-              <Notification notification={notification}/>
-              <div>{loginForm()}</div>
-          </>
-      )
+    return (
+      <>
+        <Notification notification={notification}/>
+        <div>{loginForm()}</div>
+      </>
+    )
   }
 
-    // We want to 'close' Create Blog Form when clicking create button.
-    //
-    // Ways to do this:
-    // 1) add toggleVisibility function to createBlog function in App component;
-    // 2) pass toggleVisibility function to CreateBlogForm component and call it inside of it.
-    // No matter what option is chosen, App needs to access Toggleable function!!!
-    // useRef hook can enable a parent component to access parameters of its child component.
-    //
-    // Steps for adding ref to Toggleable component using useRef hook:
-    // code in App:
-    // - add ref to Toggleable in App (toggleableRef).
-    // code in Toggleable:
-    // - wrap Toggleable component inside of a forwardRef.
-    //   This way the component can access the ref that is assigned to it.
-    // - specify the functions we want to be accessible with the help of useImperativeHandle in Toggleable.
+  // We want to 'close' Create Blog Form when clicking create button.
+  //
+  // Ways to do this:
+  // 1) add toggleVisibility function to createBlog function in App component;
+  // 2) pass toggleVisibility function to CreateBlogForm component and call it inside of it.
+  // No matter what option is chosen, App needs to access Toggleable function!!!
+  // useRef hook can enable a parent component to access parameters of its child component.
+  //
+  // Steps for adding ref to Toggleable component using useRef hook:
+  // code in App:
+  // - add ref to Toggleable in App (toggleableRef).
+  // code in Toggleable:
+  // - wrap Toggleable component inside of a forwardRef.
+  //   This way the component can access the ref that is assigned to it.
+  // - specify the functions we want to be accessible with the help of useImperativeHandle in Toggleable.
   return (
-      <>
-          <Notification notification={notification}/>
-          <div>{displayLoggedInUser()}</div>
+    <>
+      <Notification notification={notification}/>
+      <div>{displayLoggedInUser()}</div>
 
-          <Toggleable
-              showButtonLabel='create new blog'
-              hideButtonLabel='cancel'
-              ref={toggleableRef}>
-              <CreateBlogForm createBlog={createBlog}/>
-          </Toggleable>
+      <Toggleable
+        showButtonLabel='create new blog'
+        hideButtonLabel='cancel'
+        ref={toggleableRef}>
+        <CreateBlogForm createBlog={createBlog}/>
+      </Toggleable>
 
-          <h4>blog list of {user.username}</h4>
-          <div>
-              {blogs.map(blog =>
-                  <Blog key={blog.id}
-                        blog={blog}
-                        updateBlog={updateBlog}
-                        removeBlog={removeBlog}/>
-              )}
-          </div>
-      </>
+      <h4>blog list of {user.username}</h4>
+      <div>
+        {blogs.map(blog =>
+          <Blog key={blog.id}
+            blog={blog}
+            updateBlog={updateBlog}
+            removeBlog={removeBlog}/>
+        )}
+      </div>
+    </>
   )
 
 }

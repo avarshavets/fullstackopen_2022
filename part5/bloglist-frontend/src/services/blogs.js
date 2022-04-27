@@ -5,7 +5,7 @@ let token = null
 
 const setToken = newToken => {
   token = `Bearer ${newToken}`
-  axios.defaults.headers.common['Authorization'] = `Bearer ${newToken}`;
+  axios.defaults.headers.common['Authorization'] = `Bearer ${newToken}`
 }
 
 const getAll = async () => {
