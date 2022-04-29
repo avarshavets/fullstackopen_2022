@@ -128,7 +128,7 @@ describe('Blog app', () => {
                 cy.get('.blogDiv').should('have.length', 1)
             })
 
-            it.only('blogs are sorted by likes ', () => {
+            it('blogs are sorted by likes ', () => {
                 // first blog with 1 like click
                 cy.get('.toggleable-button').eq(0).click()
                 cy.get('.like-button').eq(0).click()
