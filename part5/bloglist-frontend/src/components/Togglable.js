@@ -25,12 +25,12 @@ const Toggleable = forwardRef((props, ref) => {
   return (
     <div>
       <div style={hideWhenVisible}>
-        <button onClick={toggleVisibility}>{props.showButtonLabel}</button>
+        <button onClick={toggleVisibility} id='show-toggleable-button'>{props.showButtonLabel}</button>
       </div>
       <div style={showWhenVisible}>
         {/* child component defined inside <Toggeable>...<Toggleable/> */}
         {props.children}
-        <button onClick={toggleVisibility}>{props.hideButtonLabel}</button>
+        <button onClick={toggleVisibility} id='hide-toggleable-button'>{props.hideButtonLabel}</button>
       </div>
     </div>
   )

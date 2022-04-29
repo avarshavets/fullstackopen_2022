@@ -127,14 +127,14 @@ const App = () => {
       <h2>log in to application</h2>
       <form onSubmit={handleLogin}>
         <div>
-            username <input type='text' value={username} name='Username' onChange={
+            username <input id='username' type='text' value={username} name='Username' onChange={
             (e) => setUsername(e.target.value)}/>
         </div>
         <div>
-            password <input type='text' value={password} name='Password' onChange={
+            password <input id='password' type='password' value={password} name='Password' onChange={
             (e) => setPassword(e.target.value)}/>
         </div>
-        <button type='submit'>login</button>
+        <button id='login-button' type='submit'>login</button>
       </form>
     </>
   )
@@ -158,6 +158,9 @@ const App = () => {
     }, 5000)
   }
 
+  const blogsSorted = [].concat(blogs).sort((a, b) => {
+    return b.likes - a.likes
+  })
 
   if (!user) {
     return (
@@ -186,7 +189,7 @@ const App = () => {
   return (
     <>
       <Notification notification={notification}/>
-      <div>{displayLoggedInUser()}</div>
+      <div id='logged-in-user'>{displayLoggedInUser()}</div>
 
       <Toggleable
         showButtonLabel='create new blog'
@@ -196,13 +199,15 @@ const App = () => {
       </Toggleable>
 
       <h4>blog list of {user.username}</h4>
-      <div>
-        {blogs.map(blog =>
-          <Blog key={blog.id}
-            blog={blog}
-            updateBlog={updateBlog}
-            removeBlog={removeBlog}/>
-        )}
+      <div id='blog-list'>
+        {blogsSorted
+          .map(blog =>
+            <Blog key={blog.id}
+              blog={blog}
+              updateBlog={updateBlog}
+              removeBlog={removeBlog}
+              user={user}/>
+          )}
       </div>
     </>
   )

@@ -68,5 +68,117 @@ So no matter the used solution the most important thing is to minimize the risk 
   npm install prop-types
   ```
 
+## Testing React Components
 
+Tests are written using _Jest_ and some Jest-related libraries and helper methods:
 
+- [react-testing-library](https://github.com/testing-library/react-testing-library) - a very lightweight solution for testing React components. 
+- [jest-dom](https://testing-library.com/docs/ecosystem-jest-dom/) - a companion library for Testing Library that provides custom DOM element matchers for Jest.
+
+We'll install _React Testing Library_ from ```testing-library``` and ```jest-dom```
+```shell
+npm install --save-dev @testing-library/react @testing-library/jest-dom
+```
+
+Create-react-app configures tests to be run in watch mode by default, which means that the npm test command will not exit once the tests have finished, and will instead wait for changes to be made to the code. Once new changes to the code are saved, the tests are executed automatically after which Jest goes back to waiting for new changes to be made.
+
+If you want to run tests "normally", you can do so with the command:
+
+```shell
+CI=true npm test
+```
+
+Clicking buttons in tests can be simulated by using library [user-event](https://testing-library.com/docs/user-event/intro/):
+
+```shell
+npm install --save-dev @testing-library/user-event
+```
+At the moment of writing (28.1.2022) there is a mismatch between the version of a dependency jest-watch-typeahead that create-react-app and user-event are using. The problem is fixed by installing a specific version:
+
+```shell
+npm install -D --exact jest-watch-typeahead@0.6.5
+```
+
+Test [coverage reporting](https://github.com/facebook/create-react-app/blob/ed5c48c81b2139b4414810e1efe917e04c96ee8d/packages/react-scripts/template/README.md#coverage-reporting) can be viewed by running the command:
+
+```shell
+CI=true npm test -- --coverage
+```
+
+## Ent to End (E2E) Testing
+
+Use [Cypress](https://www.cypress.io/) to implement E2E tests.
+
+[Cypress documentation](https://docs.cypress.io/guides/overview/why-cypress#In-a-nutshell)
+
+[Into to Cypress](https://docs.cypress.io/guides/core-concepts/introduction-to-cypress#Cypress-Can-Be-Simple-Sometimes)
+
+```shell
+npm install --save-dev cypress
+```
+Add to npm-scrip:
+```json
+{
+  // ...
+  "scripts": {
+    "start": "react-scripts start",
+    /// ...
+    "cypress:open": "cypress open"
+  },
+  // ...
+}
+```
+
+The tests require the tested system to be running. Unlike our backend integration tests, Cypress tests _do not start the system_ when they are run.
+
+Thus, add the npm-script to the _backend_ which starts it in test mode, or so that _NODE_ENV_ is _test_.
+
+```json
+{
+  // ...
+  "scripts": {
+    "start": "NODE_ENV=production node index.js",
+    "dev": "NODE_ENV=development nodemon index.js",
+    //...
+    "start:test": "NODE_ENV=test node index.js"
+  },
+  // ...
+}
+```
+
+Remember to _run the backend server in test mode_ when starting the Cypress tests (in our case command is previously configured in the package.json file):
+
+```shell
+  npm run start:test
+```
+
+There is also an ESlint plugin for Cypress that can be used to avoid unnecessary warnings when running ESling.
+
+```shell
+npm install eslint-plugin-cypress --save-dev
+```
+
+Add configuration for _.eslint.js_:
+
+```json
+module.exports = {
+    "env": {
+        "browser": true,
+        "es6": true,
+        "jest/globals": true,
+        "cypress/globals": true
+    },
+    "extends": [ 
+      // ...
+    ],
+    "parserOptions": {
+      // ...
+    },
+    "plugins": [
+        "react", "jest", "cypress"
+    ],
+    "rules": {
+      // ...
+    }
+}
+```
