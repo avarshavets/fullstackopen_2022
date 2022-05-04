@@ -4,6 +4,16 @@ const initialState = {
   bad: 0
 }
 
+// selector function
+export const selectGoodValue = state => state.good
+
+// action creator function
+export const voteActionCreator = (inputType) => {
+  return {
+    type: inputType
+  }
+}
+
 const counterReducer = (state = initialState, action) => {
   console.log(action)
   switch (action.type) {
