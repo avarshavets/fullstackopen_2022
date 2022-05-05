@@ -41,7 +41,7 @@ const asObject = (anecdote) => {
 // that will be stored in the List of Objects as a Redux state
 const initialState = anecdotesAtStart.map(asObject)
 
-const reducer = (state = initialState, action) => {
+const anecdoteReducer = (state = initialState, action) => {
   switch (action.type) {
     case 'VOTE': {
       // find by id an anecdote obj in a list of obj (our state)
@@ -67,4 +67,4 @@ const reducer = (state = initialState, action) => {
   return state
 }
 
-export default reducer
+export default anecdoteReducer
