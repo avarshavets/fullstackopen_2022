@@ -1,6 +1,6 @@
 // hooks to connect the App to the Store, and namely to: dispatch() selector functions
 import { useSelector, useDispatch } from 'react-redux'
-import { voteActionCreator, addAnecdoteActionCreator } from "./reducers/anecdoteReducer"
+import { voteActionCreator, addAnecdoteActionCreator } from "./reducers/anecdoteReducerWithActionCreator"
 
 const App = () => {
     // get a list of anecdote objects and order by number of votes
