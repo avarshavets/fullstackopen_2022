@@ -3,7 +3,7 @@ import {createSlice} from "@reduxjs/toolkit"
 const notificationSlice= createSlice({
     // name of the state slice (piece of state) that will be handled by the reducer
     name: 'notification',
-    initialState: 'some initial notification',
+    initialState: '',
     // reducers is an object of 'case reducers' similar to a case in a switch statement of a single reducer
     // reducers: { rFunction1(), rFunction2() } <--> reducers: {'rFunction1': rFunction1(), 'rFunction2': rFunction2() }
     // the key (name of a function) generates action's type value --> notification/notificationChange
