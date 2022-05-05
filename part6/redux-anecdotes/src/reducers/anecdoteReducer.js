@@ -1,5 +1,3 @@
-
-
 const anecdotesAtStart = [
   'If it hurts, do it more often',
   'Adding manpower to a late software project makes it later!',
@@ -14,14 +12,15 @@ const getId = () => (100000 * Math.random()).toFixed(0)
 // action creator for a vote event
 // action is an object with a type field describing the event, and additional info needed to perform the event:
 // in our case --> an obj {id: id} with id of an anecdote that needs to be updated
-export const voteActionCreator = (id) => {
+export const vote = (id) => {
   return {
     type: 'VOTE',
     data: { id }  // or { id: id }
   }
 }
 
-export const addAnecdoteActionCreator = (anecdote) => {
+// action creator for adding anecdote event
+export const addAnecdote = (anecdote) => {
   return {
     type: 'CREATE_ANECDOTE',
     data: anecdote
