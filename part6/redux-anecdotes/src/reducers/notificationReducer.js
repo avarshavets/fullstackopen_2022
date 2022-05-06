@@ -24,4 +24,14 @@ const notificationSlice= createSlice({
 
 // notification.actions generates the action creators from our notificationSlice
 export const { notificationChange, removeNotification } = notificationSlice.actions
+
+// thunk action creator
+export const setNotification = (message, displaySeconds) => {
+    // thunk function
+    return dispatch => {
+        dispatch(notificationChange(message))
+        setTimeout(() => {dispatch(removeNotification())}, displaySeconds )
+    }
+}
+
 export default notificationSlice.reducer
