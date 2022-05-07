@@ -1,7 +1,8 @@
-import {useSelector} from "react-redux"
+import { useSelector } from "react-redux"
 
 const Notification = () => {
-  const notification = useSelector(state => state.notification)
+  // notification state piece is an object { message, timeoutId }
+  const notification = useSelector(state => state.notification.message)
 
   const style = {
     border: 'solid',
