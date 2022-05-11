@@ -4,6 +4,7 @@
 // This means that the routing happens 'internally' w/o actual loading of a new content from the server.
 import { Routes, Route, Link, useNavigate, useParams, useMatch } from "react-router-dom"
 import { useState } from 'react'
+import { useField } from "./hooks"
 
 const Menu = () => {
   const padding = {
@@ -69,21 +70,27 @@ const Footer = () => (
 )
 
 const CreateNew = ({ addNew }) => {
-    const [content, setContent] = useState('')
-    const [author, setAuthor] = useState('')
-    const [info, setInfo] = useState('')
+    // content returns object { type, value, onChange }
+    const content = useField('text')
+    const author = useField('text')
+    const info = useField('text')
 
     const navigate = useNavigate()
 
     const handleSubmit = (e) => {
         e.preventDefault()
         addNew({
-            content,
-            author,
-            info,
+            content: content.value,
+            author: author.value,
+            info: info.value,
             votes: 0
         })
         navigate('/')
+    }
+    const handleReset = () => {
+        content.reset()
+        author.reset()
+        info.reset()
     }
 
     return (
@@ -92,17 +99,33 @@ const CreateNew = ({ addNew }) => {
             <form onSubmit={handleSubmit}>
                 <div>
                     content
-                    <input name='content' value={content} onChange={(e) => setContent(e.target.value)} />
+                    {/* using spread syntax
+                    type='text' value='x' onChange=onChange
+                    can be written as
+                    {...content}
+                    where
+                    const content = {type: 'text', value: 'x', onChange}
+                    Note: there should be no more other params in object other than params needed for <input /> */}
+                    <input type={content.type}
+                           value={content.value}
+                           onChange={content.onChange} />
                 </div>
                 <div>
                     author
-                    <input name='author' value={author} onChange={(e) => setAuthor(e.target.value)} />
+                    <input
+                        type={author.type}
+                        value={author.value}
+                        onChange={author.onChange} />
                 </div>
                 <div>
                     url for more info
-                    <input name='info' value={info} onChange={(e)=> setInfo(e.target.value)} />
+                    <input type={info.type}
+                           value={info.value}
+                           onChange={info.onChange} />
                 </div>
                 <button>create</button>
+                {/* type='button' indicates that onClick will not produce submit event */}
+                <button type='button' onClick={handleReset}>reset</button>
             </form>
         </div>
     )
