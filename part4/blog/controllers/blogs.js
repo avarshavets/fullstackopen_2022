@@ -41,7 +41,7 @@ blogRouter.post('/',async (request, response, next) => {
         currentUser.blogs = currentUser.blogs.concat(savedBlog._id)
         await currentUser.save()
 
-        response.status(201).json(savedBlog)
+        response.status(201).json(await savedBlog.populate('user', { username: 1, name: 1 }))
     }
     catch(error) {
         next(error)
