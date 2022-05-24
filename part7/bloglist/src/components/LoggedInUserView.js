@@ -5,6 +5,7 @@ import React, { useRef } from 'react'
 import Toggleable from './Toggleable'
 import { selectBlogByUserId } from '../reducers/blogReducer'
 import Notification from './Notification'
+import BlogTable from './BlogTable'
 
 const LoggedInUserView = () => {
   // { token, id, username, name }
@@ -17,15 +18,6 @@ const LoggedInUserView = () => {
   const toggleableRef = useRef()
   const toggleVisibility = () => { toggleableRef.current.toggleVisibility() }
 
-  const blogStyle = {
-    paddingTop: 10,
-    paddingLeft: 2,
-    border: 'solid',
-    borderWidth: 1,
-    marginBottom: 5
-  }
-
-
   if (!loggedInUser) {
     return null
   }
@@ -34,16 +26,12 @@ const LoggedInUserView = () => {
       <Notification notification={notification}/>
       <h2>My Blogs</h2>
       <Toggleable showButtonLabel='create new'
-        hideButtonLabel='cancel'
-        ref={toggleableRef}>
-        <CreateBlogForm toggleVisibility={toggleVisibility}/>
+                  hideButtonLabel='cancel'
+                  ref={toggleableRef}>
+          <CreateBlogForm toggleVisibility={toggleVisibility}/>
       </Toggleable>
       <h4>added blogs</h4>
-      {blogs.map(blog =>
-        <div key={blog.id} style={blogStyle}>
-          <Link to={`/blogs/${blog.id}`}>{blog.title}</Link>
-        </div>
-      )}
+      <BlogTable blogs={blogs}/>
     </div>
   )
 }

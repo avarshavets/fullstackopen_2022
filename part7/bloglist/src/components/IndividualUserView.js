@@ -1,21 +1,13 @@
 import { useSelector } from 'react-redux'
-import { Link, useParams } from 'react-router-dom'
+import { useParams } from 'react-router-dom'
 import { selectUserById } from '../reducers/usersReducer'
 import { selectBlogByUserId } from '../reducers/blogReducer'
+import BlogTable from './BlogTable'
 
 const IndividualUserView = () => {
   const userId = useParams().id
   const user = useSelector(state => selectUserById(state, userId))
   const blogs = useSelector(state => selectBlogByUserId(state, userId))
-
-  const blogStyle = {
-    paddingTop: 10,
-    paddingLeft: 2,
-    border: 'solid',
-    borderWidth: 1,
-    marginBottom: 5
-  }
-
 
   // the first rendering after refresh does not have a user data -->
   // Thus, first useEffect with fetching blogs and users in the App.js is skipped
@@ -30,11 +22,7 @@ const IndividualUserView = () => {
     <div id='logged-in-user'>
       <h2>{user.name}</h2>
       <h4>added blogs</h4>
-      {blogs.map(blog =>
-        <div key={blog.id} style={blogStyle}>
-          <Link to={`/blogs/${blog.id}`}>{blog.title}</Link>
-        </div>
-      )}
+      <BlogTable blogs={blogs}/>
     </div>
   )
 }

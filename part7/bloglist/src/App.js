@@ -13,9 +13,9 @@ import UsersView from './components/UsersView'
 import IndividualUserView from './components/IndividualUserView'
 import IndividualBlogView from './components/IndividualBlogView'
 import BlogsView from './components/BlogsView'
-import DisplayLoggedInUser from './components/DisplayLoggedInUser'
 import LoggedInUserView from './components/LoggedInUserView'
 import Notification from './components/Notification'
+import NavigationMenu from './components/NavigationMenu'
 // css from material ui
 import { Container, Typography } from '@mui/material'
 
@@ -76,39 +76,27 @@ const App = () => {
     navigate('/login')
   }
 
-  const menuStyle = {
-    padding: 5,
-    paddingTop: 10,
-    paddingLeft: 2,
-    marginBottom: 5
-  }
-
-  const padding = {
-    paddingRight: 15
-  }
-
-
   if (!user) {
     return (
       <Container>
         <Notification notification={notification}/>
-        <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+        <h2>log in to application</h2>
           <LoginForm username={username}
             password={password}
             handleLogin={handleLogin}/>
-        </Typography>
       </Container>
     )
   }
 
   return (
     <Container>
-      <div id='navigation-menu' style={menuStyle}>
-        <Link style={padding} to="/home">home</Link>
-        <Link style={padding} to="/">blogs</Link>
-        <Link style={padding} to="/users">users</Link>
-        <DisplayLoggedInUser userName={user.name} handleLogout={handleLogout}/>
-      </div>
+      {/*<div id='navigation-menu' style={menuStyle}>*/}
+      {/*  <Link style={padding} to="/home">home</Link>*/}
+      {/*  <Link style={padding} to="/">blogs</Link>*/}
+      {/*  <Link style={padding} to="/users">users</Link>*/}
+      {/*  <DisplayLoggedInUser userName={user.name} handleLogout={handleLogout}/>*/}
+      {/*</div>*/}
+      <NavigationMenu userName={user.name} handleLogout={handleLogout}/>
       <Routes>
         <Route path="/login"
           element={<LoginForm username={username}

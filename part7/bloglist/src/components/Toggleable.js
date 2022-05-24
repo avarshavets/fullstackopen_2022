@@ -1,6 +1,7 @@
 // reusable component that makes form visible/invisible
 import React, { forwardRef, useImperativeHandle, useState } from 'react'
 import PropTypes from 'prop-types'
+import { Button, Box } from '@mui/material'
 
 const Toggleable = forwardRef((props, ref) => {
   const [visible, setVisible] = useState(false)
@@ -25,12 +26,26 @@ const Toggleable = forwardRef((props, ref) => {
   return (
     <div>
       <div style={hideWhenVisible}>
-        <button onClick={toggleVisibility} id='show-toggleable-button'>{props.showButtonLabel}</button>
+        <Button
+            variant="contained"
+            color="primary"
+            onClick={toggleVisibility}
+            id='show-toggleable-button'>
+          {props.showButtonLabel}
+        </Button>
       </div>
       <div style={showWhenVisible}>
         {/* child component defined inside <Toggeable>...<Toggleable/> */}
         {props.children}
-        <button onClick={toggleVisibility} id='hide-toggleable-button'>{props.hideButtonLabel}</button>
+        <Box sx={{marginTop: 1}}>
+          <Button
+              variant="contained"
+              color="primary"
+              onClick={toggleVisibility}
+              id='hide-toggleable-button'>
+            {props.hideButtonLabel}
+          </Button>
+        </Box>
       </div>
     </div>
   )
