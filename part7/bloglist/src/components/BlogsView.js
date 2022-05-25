@@ -4,9 +4,10 @@ import React, { useRef } from 'react'
 import Toggleable from './Toggleable'
 import Notification from './Notification'
 import BlogTable from './BlogTable'
+import { selectAllBlogs } from "../reducers/blogReducer";
 
 const AllBlogsView = () => {
-  const blogs = useSelector(state => state.blogs )
+  const blogs = useSelector(selectAllBlogs)
   const notification = useSelector(state => state.notification )
 
   const toggleableRef = useRef()

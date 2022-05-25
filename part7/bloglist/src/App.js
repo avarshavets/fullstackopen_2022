@@ -6,7 +6,7 @@ import { initializeBlogs } from './reducers/blogReducer'
 import { initializeUsers } from './reducers/usersReducer'
 import { setNotification } from './reducers/notificationReducer'
 
-import { Routes, Route, Link, useNavigate } from 'react-router-dom'
+import { Routes, Route, useNavigate } from 'react-router-dom'
 
 import LoginForm from './components/LoginForm'
 import UsersView from './components/UsersView'
@@ -16,8 +16,9 @@ import BlogsView from './components/BlogsView'
 import LoggedInUserView from './components/LoggedInUserView'
 import Notification from './components/Notification'
 import NavigationMenu from './components/NavigationMenu'
+
 // css from material ui
-import { Container, Typography } from '@mui/material'
+import { Container } from '@mui/material'
 
 const App = () => {
   const username = useField('text')
@@ -90,12 +91,6 @@ const App = () => {
 
   return (
     <Container>
-      {/*<div id='navigation-menu' style={menuStyle}>*/}
-      {/*  <Link style={padding} to="/home">home</Link>*/}
-      {/*  <Link style={padding} to="/">blogs</Link>*/}
-      {/*  <Link style={padding} to="/users">users</Link>*/}
-      {/*  <DisplayLoggedInUser userName={user.name} handleLogout={handleLogout}/>*/}
-      {/*</div>*/}
       <NavigationMenu userName={user.name} handleLogout={handleLogout}/>
       <Routes>
         <Route path="/login"

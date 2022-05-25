@@ -1,10 +1,11 @@
 import { useSelector } from 'react-redux'
 import { Link } from 'react-router-dom'
+import { selectAllUsers } from '../reducers/usersReducer'
 
 import { TableContainer, Table, TableBody, TableRow, TableCell } from '@mui/material'
 
 const UsersView = () => {
-  const users = useSelector(state => state.users)
+  const users = useSelector(selectAllUsers)
   const loggedInUser = useSelector(state => state.user)
 
   return (
@@ -30,7 +31,7 @@ const UsersView = () => {
                               </Link>
                           </TableCell>
                           <TableCell align='right'>
-                              {user.blogs.length}
+                            {user.blogs.length}
                           </TableCell>
                       </TableRow>
                   )}

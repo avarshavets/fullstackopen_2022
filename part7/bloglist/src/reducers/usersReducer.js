@@ -1,38 +1,52 @@
-import { createSlice } from '@reduxjs/toolkit'
+import { createSlice, createEntityAdapter } from '@reduxjs/toolkit'
 import usersService from '../services/users'
+
+const userAdapter = createEntityAdapter()
+
+// getInitialState() generates an empty {ids: [], entities: {}} object as initial state
+//   users: {
+//     ids: ["user1", "user2", "user3"],
+//     entities: {
+//       "user1": {id: "user1", firstName, lastName},
+//     }}
 
 const usersSlice = createSlice({
   name: 'users',
-  initialState: [],
+  initialState: userAdapter.getInitialState(),
   reducers: {
-    setUsers(state, action) {
-      return action.payload
+    upsertUsers(state, action) {
+      userAdapter.upsertMany(state, action.payload)
+      // entities is an object. To retrieve the data, call Object.values() for list of values
+      // console.log('object', Object.values(state.entities))
     },
-
     replaceUser(state, action) {
-      const userId = action.payload.id
-      const userObj = action.payload.obj
-      return state.map(user => user.id === userId ? userObj : user)
+      userAdapter.upsertOne(state, action.payload)
     }
   }
 })
 
-export const selectUserById = (state, userId) =>
-  state.users.find(user => user.id === userId)
 
-export const { setUsers, replaceUser } = usersSlice.actions
+export const { replaceUser, upsertUsers } = usersSlice.actions
 export default usersSlice.reducer
 
 export const initializeUsers = () => {
-  return async (dispatch) => {
+  return async (dispatch, getState) => {
     const initialData = await usersService.getAll()
-    dispatch(setUsers(initialData))
+    dispatch(upsertUsers(initialData))
   }
 }
 
 export const refreshUser = (userId) => {
   return async (dispatch) => {
     const returnedObj = await usersService.get(userId)
-    dispatch(replaceUser({ id: userId, obj: returnedObj } ))
+    dispatch(replaceUser(returnedObj))
   }
 }
+
+// Export the customized selectors for this adapter using `getSelectors`
+export const {
+  selectAll: selectAllUsers,
+  selectById: selectUserById,
+  selectIds: selectUserIds
+  // Pass in a selector that returns the user slice of state
+} = userAdapter.getSelectors(state => state.users)
