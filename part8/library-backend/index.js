@@ -1,4 +1,4 @@
-const { ApolloServer, gql } = require('apollo-server')
+const { ApolloServer, UserInputError, gql } = require('apollo-server')
 const { v1: uuid } = require('uuid')
 
 let authors = [
@@ -148,6 +148,9 @@ const resolvers = {
 
     Mutation: {
         addBook: (root, args) => {
+            if (!args.title || !args.author) {
+                throw new UserInputError('Title or author is missing')
+            }
             const book = { ...args, id: uuid() }
             const author = { name: args.author, id: uuid() }
             books = books.concat(book)
