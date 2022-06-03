@@ -25,9 +25,9 @@ const typeDefs = gql`
   type Book {
     title: String!
     published: Int!
-    author: ID!
+    author: Author!
     id: ID!
-    genres: [String]
+    genres: [String]!
   }
   
   type Author {
@@ -51,6 +51,7 @@ const typeDefs = gql`
   type Query {
     bookCount: Int!
     authorCount: Int!
+    allGenres: [String]!
     allBooks(author: String, genre: String): [Book]!
     allAuthors: [Author]!
     me: User
@@ -88,19 +89,34 @@ const resolvers = {
 
         authorCount: async () => Author.collection.countDocuments(),
 
+        allGenres: async () => {
+            const books = await Book.find({})
+            const allGenres = new Set()
+            books.forEach(book => {
+                book.genres.forEach(genre => allGenres.add(genre))
+            })
+            return allGenres
+        },
+
         allBooks: async (root, args) => {
             if (args.author && args.genre) {
-                const author = await Author.findOne({ name: args.author})
-                return author ? Book.find({ author: author._id, genres: { $in: [args.genre] } }) : []
+                const authorObj = await Author.findOne({ name: args.author})
+                return authorObj ? Book
+                    .find({ author: authorObj._id, genres: { $in: [args.genre]} })
+                    .populate('author', { name: 1 }) : []
             }
             if (args.author) {
-                const author = await Author.findOne({ name: args.author})
-                return author ? Book.find({ author: author._id }) : []
+                const authorObj = await Author.findOne({ name: args.author})
+                return authorObj ? Book
+                    .find({ author: authorObj._id })
+                    .populate('author', { name: 1 }) : []
             }
             if (args.genre) {
-                return Book.find({ genres: { $in: [args.genre] }})
+                return Book
+                    .find({ genres: { $in: [args.genre] }})
+                    .populate('author', { name: 1 })
             }
-            return Book.find({})
+            return  Book.find({}).populate('author', { name: 1 })
         },
 
         allAuthors: async () => Author.find({}),
@@ -128,18 +144,18 @@ const resolvers = {
             try {
                 // find author by name: if author doesn't exist - and add new author,
                 // if author already exists - update author with new book count.
-                let author = await Author.findOne({ name: args.author })
-                if (!author) {
-                    author = new Author({ name: args.author, bookCount: 1 })
+                let authorObj = await Author.findOne({ name: args.author })
+                if (!authorObj) {
+                    authorObj = new Author({ name: args.author, bookCount: 1 })
                 } else {
-                    author.bookCount = author.bookCount + 1
+                    authorObj.bookCount = authorObj.bookCount + 1
                 }
 
-                const book = new Book({...args, author: author._id})
+                const book = new Book({ ...args, author: authorObj._id })
 
                 await book.save()
-                await author.save()
-                return book
+                await authorObj.save()
+                return book.populate('author', { name: 1 })
             }
             catch (error) {
                 throw new UserInputError(error.message, {

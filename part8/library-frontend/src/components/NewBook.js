@@ -1,8 +1,8 @@
 import { useState } from 'react'
 import { useMutation } from '@apollo/client'
-import { ADD_BOOK, ALL_AUTHORS, ALL_BOOKS } from '../queries'
+import { ADD_BOOK, ALL_AUTHORS, ALL_BOOKS, ALL_GENRES } from '../queries'
 
-const NewBook = (props) => {
+const NewBook = () => {
     const [title, setTitle] = useState('')
     const [author, setAuthor] = useState('')
     const [published, setPublished] = useState('')
@@ -15,15 +15,24 @@ const NewBook = (props) => {
     // One of the solutions - use refetchQueries
     // Other solutions: set pollInterval in queries that fetch authors / books
     const [ createBook ] = useMutation(ADD_BOOK, {
-        refetchQueries: [{ query: ALL_AUTHORS }, { query: ALL_BOOKS }],
+        refetchQueries: [{ query: ALL_AUTHORS },  { query: ALL_GENRES }],
         onError: (error) => {
             console.log('Error: ', error.graphQLErrors[0].message)
+        },
+        // update the query ALL_BOOKS in Cache by adding the new book to the cached data
+        // instead of re-fetching data from the DB
+        update: (cache, response) => {
+            cache.updateQuery({query: ALL_BOOKS, variables: {
+                    genre: null
+                }}, ({ allBooks }) => {
+                return {
+                    allBooks: allBooks.concat(response.data.addBook),
+                }
+            })
         }
+
     })
 
-    if (!props.show) {
-        return null
-    }
 
     const submit = async (event) => {
         event.preventDefault()
