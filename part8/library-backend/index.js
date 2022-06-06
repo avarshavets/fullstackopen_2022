@@ -14,6 +14,9 @@ const User = require('./models/user')
 const typeDefs = require('./schema')
 const resolvers = require('./resolvers')
 
+const { execute, subscribe } = require('graphql')
+const { SubscriptionServer } = require('subscriptions-transport-ws')
+
 const MONGODB_URI = process.env.MONGODB_URI
 console.log('connecting to', MONGODB_URI)
 
@@ -30,6 +33,18 @@ const start = async () => {
 
     const schema = makeExecutableSchema({ typeDefs, resolvers })
 
+    const subscriptionServer = SubscriptionServer.create(
+        {
+            schema,
+            execute,
+            subscribe,
+        },
+        {
+            server: httpServer,
+            path: '',
+        }
+    )
+
     const server = new ApolloServer({
         schema,
         // the object returned by context is given to all resolvers as their third parameter
@@ -41,7 +56,18 @@ const start = async () => {
                 return {currentUser}
             }
         },
-        plugins: [ApolloServerPluginDrainHttpServer({ httpServer })],
+        plugins: [
+            ApolloServerPluginDrainHttpServer({ httpServer }),
+            {
+                async serverWillStart() {
+                    return {
+                        async drainServer() {
+                            subscriptionServer.close()
+                        },
+                    }
+                },
+            },
+        ],
     })
 
     await server.start()

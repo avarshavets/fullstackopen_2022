@@ -5,6 +5,9 @@ const User = require("./models/user");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 
+const { PubSub } = require('graphql-subscriptions')
+const pubsub = new PubSub()
+
 const resolvers = {
     Query: {
         bookCount: async () => Book.collection.countDocuments(),
@@ -77,7 +80,10 @@ const resolvers = {
 
                 await book.save()
                 await authorObj.save()
-                return book.populate('author', { name: 1 })
+                const populatedBook = book.populate('author', { name: 1 })
+                pubsub.publish('BOOK_ADDED', { bookAdded: populatedBook })
+
+                return populatedBook
             }
             catch (error) {
                 throw new UserInputError(error.message, {
@@ -157,6 +163,11 @@ const resolvers = {
 
             // return object of type Token
             return { value: token }
+        }
+    },
+    Subscription: {
+        bookAdded: {
+            subscribe: () => pubsub.asyncIterator(['BOOK_ADDED'])
         }
     }
 }
