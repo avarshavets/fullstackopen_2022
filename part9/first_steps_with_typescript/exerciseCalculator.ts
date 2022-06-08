@@ -3,7 +3,7 @@ interface ExerciseResult {
     trainingDays: number,
     target: number,
     average: number,
-    success: Boolean,
+    success: boolean,
     rating: number,
     ratingDescription: string
 }
@@ -18,9 +18,7 @@ const calculateExercises = (target: number, exercises: Array<number>): ExerciseR
         if (average < 2) {
             return 2
         }
-        if (average >= 2) {
-            return 3
-        }
+        return 3
     }
     const ratingExplanation = {
         1: 'not enough exercises',
@@ -47,11 +45,11 @@ const calculateExercises = (target: number, exercises: Array<number>): ExerciseR
 console.log(calculateExercises(2,[3, 0, 2, 4.5, 0, 3, 1]))
 
 // function that takes and parsed the input from the command line
-interface ExerciseInputValues {
+interface ExerciseValues {
     target: number,
     exercises: Array<number>
 }
-const parseExerciseArguments = (args: Array<string>) => {
+const parseExerciseArguments = (args: Array<string>): ExerciseValues => {
     // ts-node + file name + target + 7 daily exercise hours --> 10 arguments
     if (args.length < 10) throw  new Error('Not enough arguments')
 
@@ -67,7 +65,7 @@ const parseExerciseArguments = (args: Array<string>) => {
     }
     if (!areNumbers) throw new Error('Provided values are not numbers!')
 
-    let exercises = []
+    const exercises = []
     const target = Number(arrayOfStrings[0])
     for (const s of arrayOfStrings.slice(1)) {
         exercises.push(Number(s))
@@ -86,3 +84,5 @@ try {
 catch (error: unknown) {
     console.log(error)
 }
+
+export default calculateExercises

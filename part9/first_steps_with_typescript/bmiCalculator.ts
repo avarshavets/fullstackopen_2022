@@ -4,13 +4,13 @@ const calculateBmi = (height: number, weight: number): Result => {
     if (bmi < 18.4) {
         return 'Underweight'
     }
-    if (bmi > 18.5 && bmi < 24.9) {
+    if (bmi >= 18.5 && bmi < 24.9) {
         return 'Normal'
     }
-    if (bmi > 25.0 && bmi < 29.9) {
+    if (bmi >= 25.0 && bmi < 29.9) {
         return 'Overweight'
     }
-    if (bmi > 30.0) {
+    if (bmi >= 30.0) {
         return 'Obese'
     }
     throw new Error('not being able to perform calculation')
@@ -22,9 +22,9 @@ console.log(calculateBmi(180, 74))
 
 // To get the calculator work with command-line parameters, process.argv
 // Note: argv[0] = "ts-node", argv[1] = "file name", and argv[2] , argv[3] are height and weight respectively!
-const height: number = Number(process.argv[2])
-const weight: number = Number(process.argv[3])
-// console.log(`BMI with ${height} and ${weight} =`, calculateBmi(height, weight))
+const height = Number(process.argv[2])
+const weight = Number(process.argv[3])
+console.log(`BMI with ${height} and ${weight} =`, calculateBmi(height, weight))
 
 
 // Adding data validation for data provided through command-line
@@ -56,3 +56,5 @@ try {
 catch (error: unknown) {
     console.log(error)
 }
+
+export default calculateBmi
