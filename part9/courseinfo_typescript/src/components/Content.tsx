@@ -1,19 +1,16 @@
-interface Part {
-    name: string,
-    exerciseCount: number
+import CoursePart, {Part} from "./Part";
+
+
+const Content = ({ courseParts }: { courseParts: Array<Part> }) : JSX.Element => {
+    const style = {marginBottom: 10}
+    return (
+        <div>
+            {courseParts.map(p =>
+                <div key={p.name} style={style}>
+                    <CoursePart part={p}/>
+                </div>)}
+        </div>
+    )
 }
-const Content = ({ courseParts }: { courseParts: Array<Part> }) : JSX.Element => (
-    <div>
-        <p>
-            {courseParts[0].name} {courseParts[0].exerciseCount}
-        </p>
-        <p>
-            {courseParts[1].name} {courseParts[1].exerciseCount}
-        </p>
-        <p>
-            {courseParts[2].name} {courseParts[2].exerciseCount}
-        </p>
-    </div>
-)
 
 export default Content
