@@ -4,12 +4,17 @@ import express from 'express'
 // all these functions could have been also written here inside api functions
 import patientService from "../services/patientService";
 // import { toNewPatientEntry } from '../utils';
-import { NewPatient } from "../types";
+import {NewPatient, Patient} from "../types";
 
 const patientRouter = express.Router()
 
 patientRouter.get('/', (_req, res) => {
     res.send(patientService.getPatientsWithoutSsn())
+})
+
+patientRouter.get('/:id', (req, res:express.Response<Patient|string>) => {
+    const patient = patientService.getPatientById(req.params.id)
+    return patient ? res.status(200).json(patient) : res.status(400).send("patient id not found")
 })
 
 // alternative to parsing and validating every filed of the request's body object,

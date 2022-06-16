@@ -22,6 +22,10 @@ const getPatientsWithoutSsn = (): Array<PatientWithoutSsn> => {
     }))
 }
 
+const getPatientById = (id: string): Patient | undefined => {
+    return patients.find(p => p.id === id)
+}
+
 const addPatient = (object: NewPatient): Patient => {
     const newPatient = {
         id: uuid(),
@@ -33,6 +37,7 @@ const addPatient = (object: NewPatient): Patient => {
 
 export default {
     getPatients,
+    getPatientById,
     addPatient,
     getPatientsWithoutSsn
 }
