@@ -1,5 +1,5 @@
 import { State } from "./state";
-import { Patient } from "../types";
+import {Diagnosis, Patient} from "../types";
 
 export type Action =
   | {
@@ -13,6 +13,10 @@ export type Action =
   | {
       type: "SET_INDIVIDUAL_PATIENT";
       payload: Patient;
+    }
+  | {
+      type: "SET_DIAGNOSES_LIST";
+      payload: Diagnosis[];
     };
 
 // action creators that is passed in dispatch function
@@ -27,6 +31,13 @@ export const addPatient = (patient: Patient): Action => {
   return {
     type: "ADD_PATIENT",
     payload: patient
+  };
+};
+
+export const setDiagnosesList = (diagnosesList: Diagnosis[]): Action => {
+  return {
+    type: "SET_DIAGNOSES_LIST",
+    payload: diagnosesList
   };
 };
 
@@ -52,7 +63,17 @@ export const reducer = (state: State, action: Action): State => {
           [action.payload.id]: action.payload
         }
       };
-
+    case "SET_DIAGNOSES_LIST":
+      return {
+        ...state,
+        diagnoses: {
+          ...action.payload.reduce(
+              (memo, diagnose) => ({...memo, [diagnose.code]: diagnose}),
+              {}
+          ),
+          ...state.diagnoses
+        }
+      };
     default:
       return state;
   }

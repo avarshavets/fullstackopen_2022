@@ -1,10 +1,7 @@
 import {useParams} from "react-router-dom";
 import React from "react";
-import axios from "axios";
-import {apiBaseUrl} from "../constants";
-import {Patient, Entry} from "../types";
-import {useEffect} from "react";
-import {addPatient, useStateValue} from "../state";
+import {Entry} from "../types";
+import {useStateValue} from "../state";
 import EntryDetails from "./EntryDetails";
 // import {Typography } from "@material-ui/core";
 // import FemaleIcon from '@mui/icons-material/Female';
@@ -16,7 +13,8 @@ const Index = () => {
     const {id} = useParams<{ id: string }>();
     // const id = useParams<{ id: string }>().id;
 
-    const [{ patients }, dispatch] = useStateValue();
+    const [{ patients }] = useStateValue();
+
     const individualPatient = Object.values(patients).find(p => p.id === id);
 
     if (!individualPatient) {
