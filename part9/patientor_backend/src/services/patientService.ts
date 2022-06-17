@@ -1,14 +1,16 @@
-import patientData from '../../data/patients.json'
+// import patientData from '../../data/patients.json'
+import patients from "../../data/patients_expanded"
 import { Patient, PatientWithoutSsn, NewPatient } from '../types'
 import { v1 as uuid } from 'uuid'
 // add types to JSON object that is imported from patients.json
 // another way to get patient data is to create a separate .ts file with already typed patient data
 // (see patientsTyped.ts),
 // drawback of it - the file is used only by typescript and no other programs
-const patients: Array<Patient> = patientData
+// const patients: Array<Patient> = patientData
 
 // Array<Patient> = Patient[]
 const getPatients = (): Patient[] => {
+    console.log(patients)
     return patients
 }
 
@@ -18,7 +20,8 @@ const getPatientsWithoutSsn = (): Array<PatientWithoutSsn> => {
         name: p.name,
         dateOfBirth: p.dateOfBirth,
         gender: p.gender,
-        occupation: p.occupation
+        occupation: p.occupation,
+        entries: p.entries
     }))
 }
 
