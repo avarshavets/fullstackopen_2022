@@ -1,11 +1,11 @@
 import {useParams} from "react-router-dom";
 import React from "react";
-import {Entry} from "../types";
+import {Entry, Gender} from "../types";
 import {useStateValue} from "../state";
 import EntryDetails from "./EntryDetails";
 // import {Typography } from "@material-ui/core";
-// import FemaleIcon from '@mui/icons-material/Female';
-// import MaleIcon from '@mui/icons-material/Male';
+import FemaleIcon from '@mui/icons-material/Female';
+import MaleIcon from '@mui/icons-material/Male';
 
 
 const Index = () => {
@@ -17,13 +17,26 @@ const Index = () => {
 
     const individualPatient = Object.values(patients).find(p => p.id === id);
 
+    const genderIcon = (gender: Gender) => {
+        switch (gender) {
+            case "female":
+                return <FemaleIcon />;
+            case "male":
+                return <MaleIcon />;
+            case "other":
+                return null;
+            default:
+                return null;
+        }
+    };
+
     if (!individualPatient) {
         return null;
     }
 
     return (
         <div>
-            <h2>{individualPatient.name}</h2>
+            <h2>{individualPatient.name}{genderIcon(individualPatient.gender)}</h2>
             <div>ssn: {individualPatient.ssn}</div>
             <div>date of birth: {individualPatient.dateOfBirth}</div>
             <div>occupation: {individualPatient.occupation}</div>
