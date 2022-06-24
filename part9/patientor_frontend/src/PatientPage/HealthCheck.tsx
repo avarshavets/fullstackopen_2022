@@ -11,7 +11,7 @@ const HealthCheck: React.FC<{ entry: HealthCheckEntry }> = ({entry}) => {
             <div>{entry.date} -- <b>{entry.type}</b></div>
             <div><i>{entry.description}</i></div>
             <div>health check rating: {entry.healthCheckRating}</div>
-            {!entry.diagnosisCodes ? null : < Diagnoses diagnoseCodes={entry.diagnosisCodes as string[]}/>}
+            {!entry.diagnosisCodes ? null : < Diagnoses diagnoseCodes={entry.diagnosisCodes}/>}
         </>
 
     );

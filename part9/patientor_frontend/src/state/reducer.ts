@@ -17,6 +17,10 @@ export type Action =
   | {
       type: "SET_DIAGNOSES_LIST";
       payload: Diagnosis[];
+    }
+  | {
+      type: "UPDATE_PATIENT";
+      payload: Patient;
     };
 
 // action creators that is passed in dispatch function
@@ -30,6 +34,13 @@ export const setPatientList = (patientList: Patient[]): Action => {
 export const addPatient = (patient: Patient): Action => {
   return {
     type: "ADD_PATIENT",
+    payload: patient
+  };
+};
+
+export const updatePatient = (patient: Patient): Action => {
+  return {
+    type: "UPDATE_PATIENT",
     payload: patient
   };
 };
@@ -72,6 +83,14 @@ export const reducer = (state: State, action: Action): State => {
               {}
           ),
           ...state.diagnoses
+        }
+      };
+    case "UPDATE_PATIENT":
+      return {
+        ...state,
+        patients: {
+          ...state.patients,
+          [action.payload.id]: action.payload
         }
       };
     default:

@@ -1,6 +1,6 @@
 // import patientData from '../../data/patients.json'
 import patients from "../../data/patients_expanded"
-import { Patient, PatientWithoutSsn, NewPatient } from '../types'
+import {Patient, PatientWithoutSsn, NewPatient, NewEntry} from '../types'
 import { v1 as uuid } from 'uuid'
 // add types to JSON object that is imported from patients.json
 // another way to get patient data is to create a separate .ts file with already typed patient data
@@ -32,15 +32,30 @@ const getPatientById = (id: string): Patient | undefined => {
 const addPatient = (object: NewPatient): Patient => {
     const newPatient = {
         id: uuid(),
-        ...object
+        ...object,
     }
     patients.push(newPatient)
     return newPatient
+}
+
+const addEntry = (object: NewEntry, patientId: string): Patient => {
+    const newEntry = {
+        id: uuid(),
+        ...object
+    }
+
+    const patientToUpdate = getPatientById(patientId)
+    if (patientToUpdate) {
+        patientToUpdate.entries.push(newEntry)
+        return patientToUpdate
+    }
+    throw new Error('patient id not found')
 }
 
 export default {
     getPatients,
     getPatientById,
     addPatient,
-    getPatientsWithoutSsn
+    getPatientsWithoutSsn,
+    addEntry
 }

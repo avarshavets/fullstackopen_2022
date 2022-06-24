@@ -10,10 +10,10 @@ const Hospital: React.FC<{ entry: HospitalEntry }> = ({entry}) => {
         <>
             <div>{entry.date} -- <b>{entry.type}</b></div>
             <div><i>{entry.description}</i></div>
-            {!entry.diagnosisCodes ? null : < Diagnoses diagnoseCodes={entry.diagnosisCodes as string[]}/>}
+            {!entry.diagnosisCodes ? null : < Diagnoses diagnoseCodes={entry.diagnosisCodes}/>}
 
             <div>diagnose by {entry.specialist}</div>
-            <p>discharge:</p>
+            <div>discharge:</div>
             <ul style={{ listStyleType: "none" }}>
                 <li>{entry.discharge.date}</li>
                 <li>{entry.discharge.criteria}</li>

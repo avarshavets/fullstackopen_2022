@@ -9,7 +9,7 @@ const Diagnoses: React.FC<{ diagnoseCodes: string[] }> = ({diagnoseCodes}) => {
     }
     return (
         <>
-            <p>diagnoses:</p>
+            <div>diagnoses:</div>
             <ul>{diagnoseCodes.map((code, i) =>
                 <li key={i}>{code}: {diagnoses[code].name}</li>
             )}

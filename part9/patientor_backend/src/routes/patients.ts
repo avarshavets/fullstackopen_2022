@@ -4,7 +4,7 @@ import express from 'express'
 // all these functions could have been also written here inside api functions
 import patientService from "../services/patientService";
 // import { toNewPatientEntry } from '../utils';
-import {NewPatient, Patient} from "../types";
+import {NewEntry, NewPatient, Patient} from "../types";
 
 const patientRouter = express.Router()
 
@@ -25,6 +25,25 @@ patientRouter.post('/', (req:express.Request<NewPatient>, res) => {
         const newPatient = req.body
         const addedPatient = patientService.addPatient(newPatient)
         res.json(addedPatient)
+    }
+    catch (error: unknown) {
+        res.status(400).send((error as Error).message)
+    }
+})
+
+// both body and params are typed
+interface TypedRequest<T, U> extends Express.Request {
+    params: T
+    body: U
+}
+
+// alternative: leave req untyped but add toNewEntry function that parses and validates req body
+patientRouter.post('/:id/entries',
+    (req: TypedRequest<{id: string}, NewEntry>, res:express.Response<Patient|string> ) => {
+    try {
+        const newMedEntry = req.body
+        const updatedPatient = patientService.addEntry(newMedEntry, req.params.id)
+        res.json(updatedPatient)
     }
     catch (error: unknown) {
         res.status(400).send((error as Error).message)

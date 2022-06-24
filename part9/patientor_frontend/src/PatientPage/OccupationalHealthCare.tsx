@@ -10,10 +10,14 @@ const OccupationalHealthCare: React.FC<{ entry: OccupationalHealthcareEntry }> =
         <>
             <div>{entry.date} -- <b>{entry.type}</b></div>
             <div><i>{entry.description}</i></div>
-            {!entry.diagnosisCodes ? null : < Diagnoses diagnoseCodes={entry.diagnosisCodes as string[]}/>}
+            {!entry.diagnosisCodes ? null : < Diagnoses diagnoseCodes={entry.diagnosisCodes}/>}
 
-            <div>diagnose by {entry.employerName}</div>
-            {entry.sickLeave && <p>sick leave: {entry.sickLeave?.startDate} - {entry.sickLeave?.startDate}</p>}
+            <div>diagnose by {entry.specialist}</div>
+            <div>employer: {entry.employerName}</div>
+            {(entry.sickLeave?.startDate && entry.sickLeave?.endDate) &&
+            <div>
+                sick leave: {entry.sickLeave?.startDate} - {entry.sickLeave?.startDate}
+            </div>}
         </>
 
     );

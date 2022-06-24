@@ -1,23 +1,17 @@
 import React from "react";
-import {Entry} from "../types";
+import {Entry, EntryType} from "../types";
 import HealthCheck from "./HealthCheck";
 import Hospital from "./Hospital";
 import OccupationalHealthCare from "./OccupationalHealthCare";
+import {assertNever} from "../utils";
 
-// Helper function for exhaustive type checking
-const assertNever = (value: never): never => {
-    throw new Error(
-        `Unhandled discriminated union member: ${JSON.stringify(value)}`
-    );
-};
-
-const EntryDetails: React.FC<{ entry: Entry }> = ({entry}) => {
+const EntryDetails: React.FC<{ entry: Entry }> = ({entry}): JSX.Element => {
     switch (entry.type) {
-        case "HealthCheck":
+        case EntryType.HealthCheck:
             return <HealthCheck entry={entry}/>;
-        case "Hospital":
+        case EntryType.Hospital:
             return <Hospital entry={entry}/>;
-        case "OccupationalHealthcare":
+        case EntryType.OccupationalHealthcare:
             return <OccupationalHealthCare entry={entry}/>;
         default:
             return assertNever(entry);
